@@ -27,3 +27,4 @@ Dockerfile
 .rubocop.yml
 spec
 test
+/data
