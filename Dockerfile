@@ -35,9 +35,11 @@ RUN apk add --no-cache \
     yaml-dev \
     zlib-dev \
     && ( echo 'install: --no-document' ; echo 'update: --no-document' ) >>/etc/gemrc
-COPY . ./
+COPY package.json package-lock.json yarn.lock Gemfile.lock Gemfile ./
 RUN bundle install -j4 \
     && yarn install
+
+COPY . ./
 
 ARG RAILS_ENV
 ENV RAILS_ENV=${RAILS_ENV:-production}
