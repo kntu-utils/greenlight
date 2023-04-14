@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "node esbuild.mjs",
-    "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules --style compressed",
+    "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules --style compressed && rtlcss ./app/assets/builds/application.css",
     "build:development": "node esbuild.dev.mjs",
     "build:development:css": "sass ./app/assets/stylesheets/application.bootstrap.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
