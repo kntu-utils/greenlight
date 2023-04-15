@@ -42,7 +42,7 @@ jobs:
         id: ci_docker_repository
         if: contains(env.DOCKER_BUILD_ENABLED, 'true')
         shell: bash
-        run: echo "##[set-output name=repository;]$(echo $DOCKER_REPOSITORY/$GITHUB_REPOSITORY)"
+        run: echo "##[set-output name=repository;]$(echo $DOCKER_REPOSITORY/${GITHUB_REPOSITORY#*/})"
 
       - name: Extract Tag Release Version
         id: ci_tag_release_version
