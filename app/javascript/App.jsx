@@ -35,7 +35,7 @@ export default function App() {
   // i18n
   const { i18n } = useTranslation();
   useEffect(() => {
-    i18n.changeLanguage(currentUser?.language);
+    if (currentUser?.id) i18n.changeLanguage(currentUser?.language);
   }, [currentUser?.language]);
 
   // Greenlight V3 brand-color theming
