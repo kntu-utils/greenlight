@@ -20,7 +20,7 @@ services:
 
   greenlight-v3:
     entrypoint: [bin/start]
-    build: ./
+    image: mahdilotfi/greenlight:latest
     container_name: greenlight-v3
     restart: unless-stopped
     env_file: .env
