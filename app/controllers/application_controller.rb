@@ -18,6 +18,7 @@
 
 class ApplicationController < ActionController::Base
   include Pagy::Backend
+  before_action :set_locale
 
   # Returns the current signed in User (if any)
   def current_user
@@ -35,6 +36,14 @@ class ApplicationController < ActionController::Base
     end
 
     @current_user = user
+  end
+
+  def set_locale
+    if current_user&.language
+      I18n.locale = current_user.language
+    else
+      I18n.locale = :fa # TODO: read from configuration
+    end
   end
 
   # Returns whether hcaptcha is enabled by checking if ENV variables are set
