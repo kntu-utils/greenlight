@@ -42,6 +42,8 @@ export default function HomePage() {
         navigate('/rooms');
       } else if (!currentUser.stateChanging && currentUser.signed_in && currentUser.permissions.CreateRoom === 'false') {
         navigate('/home');
+      } else if (!currentUser.stateChanging && !currentUser.signed_in) {
+        navigate('/signin');
       }
     },
     [currentUser.signed_in],
@@ -72,42 +74,7 @@ export default function HomePage() {
             <p className="text-muted fs-5">
               {t('homepage.greenlight_description')}
             </p>
-            <a href="https://bigbluebutton.org/" className="fs-5 text-link fw-bolder">
-              {t('homepage.learn_more')}
-              <ArrowRightIcon className="hi-s ms-2" />
-            </a>
           </div>
-        </Col>
-      </Row>
-      <Row>
-        <h4 className="text-muted text-uppercase my-4 py-1">{t('homepage.explore_features')}</h4>
-        <Col className="mb-3">
-          <HomepageFeatureCard
-            title={t('homepage.meeting_title')}
-            description={t('homepage.meeting_description')}
-            icon={<ComputerDesktopIcon className="hi-s text-white" />}
-          />
-        </Col>
-        <Col className="mb-3">
-          <HomepageFeatureCard
-            title={t('homepage.recording_title')}
-            description={t('homepage.recording_description')}
-            icon={<VideoCameraIcon className="hi-s text-white" />}
-          />
-        </Col>
-        <Col className="mb-3">
-          <HomepageFeatureCard
-            title={t('homepage.settings_title')}
-            description={t('homepage.settings_description')}
-            icon={<Cog8ToothIcon className="hi-s text-white" />}
-          />
-        </Col>
-        <Col className="mb-3">
-          <HomepageFeatureCard
-            title={t('homepage.and_more_title')}
-            description={t('homepage.and_more_description')}
-            icon={<WrenchScrewdriverIcon className="hi-s text-white" />}
-          />
         </Col>
       </Row>
     </>
