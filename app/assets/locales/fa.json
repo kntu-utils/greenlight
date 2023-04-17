@@ -39,8 +39,8 @@
     "settings_description": "Configure your rooms and meeting settings to be in charge of an effective classroom.",
     "and_more_title": "And more!",
     "and_more_description": "BigBlueButton offers built-in tools for applied learning and is designed to save you time during class.",
-    "enter_meeting_url": "آدرس جلسه را وارد کنید",
-    "enter_meeting_url_instruction": "آدرس جلسه ای که قصد پیوستن به آن را دارید وارد کنید."
+    "enter_meeting_url": "ورود به جلسه",
+    "enter_meeting_url_instruction": "آدرس یا کد جلسه ای که قصد پیوستن به آن را دارید وارد کنید"
   },
   "authentication": {
     "sign_in": "ورود",
@@ -151,13 +151,18 @@
       "mute_users_on_join": "کاربران هنگام پیوستن بی‌صدا شوند",
       "generate": "تولید کن",
       "access_code": "کد دسترسی",
+      "access_code_placeholder": "کد دسترسی را وارد کنید",
       "mod_access_code": "کد دسترسی مدیر",
+      "mod_access_code_placeholder": "کد دسترسی مدیر را وارد کنید",
       "mod_access_code_optional": "کد دسترسی مدیر (اختیاری)",
+      "mod_access_code_optional_placeholder": "کد دسترسی اختیاری مدیر را وارد کنید",
       "access_code_required": "لطفا کد دسترسی را وارد کنید",
       "wrong_access_code": "کد دسترسی اشتباه است",
       "generate_viewers_access_code": "ایجاد کد دسترسی برای بینندگان",
       "generate_mods_access_code": "ایجاد کد دسترسی برای مدیران",
-      "are_you_sure_delete_room": "آیا از حذف اتاق مورد نظر اطمینان دارید؟"
+      "are_you_sure_delete_room": "آیا از حذف اتاق مورد نظر اطمینان دارید؟",
+      "name": "نام",
+      "name_placeholder": "نام خود را وارد کنید"
     }
   },
   "recording": {

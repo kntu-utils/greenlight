@@ -169,13 +169,21 @@ export default function RoomJoin() {
 
   const hasAccessCode = publicRoom.data?.viewer_access_code || publicRoom.data?.moderator_access_code;
 
+  fields.name.label = t('room.settings.name');
+  fields.name.placeHolder = t('room.settings.name_placeholder');
+
+  fields.recordingConsent.label = t('room.meeting.recording_consent');
+
   if (publicRoom.data?.viewer_access_code || !publicRoom.data?.moderator_access_code) {
     fields.accessCode.label = t('room.settings.access_code');
+    fields.accessCode.placeHolder = t('room.settings.access_code_placeholder');
   // for the case where anyone_join_as_moderator is true and only the moderator access code is required
   } else if (publicRoom.data?.anyone_join_as_moderator === 'true') {
     fields.accessCode.label = t('room.settings.mod_access_code');
+    fields.accessCode.placeHolder = t('room.settings.mod_access_code_placeholder');
   } else {
     fields.accessCode.label = t('room.settings.mod_access_code_optional');
+    fields.accessCode.placeHolder = t('room.settings.mod_access_code_optional_placeholder');
   }
 
   const WaitingPage = (
