@@ -23,9 +23,24 @@
   "are_you_sure": "آیا مطمئنی؟",
   "return_home": "بازگشت به صفحه اصلی",
   "created_at": "ایجاد شده در",
+  "no_result_search_input": "برای \"{{ searchInput }}\" نتیجه ای یافت نشد",
+  "action_permanent": "این عمل قابل بازگشت نیست.",
   "homepage": {
-    "welcome_bbb": "به BigBlueButton خوش آمدید.",
-    "greenlight_description": "Greenlight یک فرانت‌اند ساده برای سرور کنفرانس وب متن باز BigBlueButton برای شما است. می‌توانید اتاق‌های خود را برای میزبانی جلسات ایجاد کنید یا با استفاده از یک پیوند کوتاه و راحت برای پیوستن به جلسات به دیگران بدهید."
+    "welcome_bbb": "به سامانه جلسات آنلاین دانشگاه خواجه نصیرالدین طوسی خوش آمدید.",
+    "bigbluebutton_description": "BigBlueButton is an open source web conferencing system for online classes. The platform maximizes time for applied learning by enabling students to collaborate and receive feedback in real-time.",
+    "greenlight_description": "Greenlight یک فرانت‌اند ساده برای سرور کنفرانس وب متن باز BigBlueButton برای شما است. می‌توانید اتاق‌های خود را برای میزبانی جلسات ایجاد کنید یا با استفاده از یک پیوند کوتاه و راحت برای پیوستن به جلسات به دیگران بدهید.",
+    "learn_more": "Learn more about BigBlueButton",
+    "explore_features": "Explore our features",
+    "meeting_title": "Launch a meeting",
+    "meeting_description": "Launch a virtual class with video, audio, screen sharing, chat, and all the tools required for applied learning.",
+    "recording_title": "Record your meetings",
+    "recording_description": "Record the BigBlueButton meetings and share them with the students to review and reflect on the material.",
+    "settings_title": "Manage your rooms",
+    "settings_description": "Configure your rooms and meeting settings to be in charge of an effective classroom.",
+    "and_more_title": "And more!",
+    "and_more_description": "BigBlueButton offers built-in tools for applied learning and is designed to save you time during class.",
+    "enter_meeting_url": "آدرس جلسه را وارد کنید",
+    "enter_meeting_url_instruction": "آدرس جلسه ای که قصد پیوستن به آن را دارید وارد کنید."
   },
   "authentication": {
     "sign_in": "ورود",
@@ -52,6 +67,7 @@
     "full_name": "نام کامل",
     "no_user_found": "هیچ کاربری پیدا نشد",
     "type_three_characters": "لطفا سه «۳» کاراکتر یا بیشتر برای نمایش دیگر کاربران تایپ کنید.",
+    "search_not_found": "هیچ کاربری پیدا نشد",
     "profile": {
       "profile": "نمایه",
       "language": "زبان",
@@ -74,9 +90,13 @@
       "are_you_sure_delete_account": "آیا مطمئن هستید که می‌خواهید حساب کاربری خود را حذف کنید؟"
     },
     "avatar": {
-      "upload_avatar": "بارگذاری آواتار",
-      "delete_avatar": "حذف آواتار",
-      "crop_avatar": "برش آواتار شما"
+      "upload_avatar": "بارگذاری تصویر نمایه",
+      "delete_avatar": "حذف تصویر نمایه",
+      "crop_avatar": "برش تصویر نمایه"
+    },
+    "pending": {
+      "title": "در انتظار تایید",
+      "message": "با تشکر از ثبت نام شما! حساب کاربری شما پس تایید توسط مدیر سامانه فعال خواهد شد."
     }
   },
   "room": {
@@ -89,9 +109,9 @@
     "create_new_room": "ایجاد اتاق جدید",
     "enter_room_name": "نام اتاق را وارد کنید",
     "shared_by": "اشتراک گذاشته شده توسط",
-    "last_session": "آخرین جلسه: {{ room.last_session }}",
+    "last_session": "آخرین جلسه: {{ localizedTime }}",
     "no_last_session": "هنوز هیچ جلسه‌ای از قبل ایجاد نشده است",
-    "no_rooms_found": "هیچ اتاقی پیدا نشد",
+    "search_not_found": "اتاقی یافت نشد",
     "rooms_list_is_empty": "شما هنوز هیچ اتاقی ندارید!",
     "rooms_list_empty_create_room": "با کلیک بر روی دکمه زیر و وارد کردن نام اتاق، اولین اتاق خود را ایجاد کنید.",
     "meeting": {
@@ -114,7 +134,9 @@
       "add_share_access": "+ اشتراک گذاری دسترسی",
       "share_room_access": "دسترسی به اتاق را به اشتراک بگذارید",
       "add_some_users": "زمان اضافه کردن برخی از کاربران!",
-      "add_some_users_description": "برای افزودن کاربران جدید، روی دکمه زیر کلیک کنید و کاربرانی را که می‌خواهید این اتاق را با آنها به اشتراک بگذارید، جستجو یا انتخاب کنید."
+      "add_some_users_description": "برای افزودن کاربران جدید، روی دکمه زیر کلیک کنید و کاربرانی را که می‌خواهید این اتاق را با آنها به اشتراک بگذارید، جستجو یا انتخاب کنید.",
+      "delete_shared_access": "حذف دسترسی اشتراکی",
+      "are_you_sure_delete_shared_access": "آیا از حذف این دسترسی اشتراکی اطمینان دارید؟"
     },
     "settings": {
       "settings": "تنظیمات",
@@ -134,7 +156,8 @@
       "access_code_required": "لطفا کد دسترسی را وارد کنید",
       "wrong_access_code": "کد دسترسی اشتباه است",
       "generate_viewers_access_code": "ایجاد کد دسترسی برای بینندگان",
-      "generate_mods_access_code": "ایجاد کد دسترسی برای مدیران"
+      "generate_mods_access_code": "ایجاد کد دسترسی برای مدیران",
+      "are_you_sure_delete_room": "آیا از حذف اتاق مورد نظر اطمینان دارید؟"
     }
   },
   "recording": {
@@ -151,8 +174,11 @@
     "length_in_minutes": "{{recording.length}} دقیقه.",
     "processing_recording": "در حال پردازش ضبط...",
     "copy_recording_urls": "کپی آدرس(های) ضبط شده",
-    "no_recording_found": "هیچ ضبطی یافت نشد",
-    "are_you_sure_delete_recording": "آیا مطمئنید که می‌خواهید این ضبط را حذف کنید؟"
+    "recordings_list_empty": "شما هنوز جلسه ضبط شده‌ای ندارید!",
+    "recordings_list_empty_description": "هنگامی که جلسه ای را ضبط کنید، اینجا نمایش داده خواهد شد.",
+    "delete_recording": "حذف جلسه ضبط شده",
+    "are_you_sure_delete_recording": "آیا مطمئنید که می‌خواهید این جلسه ضبط شده‌را حذف کنید؟",
+    "search_not_found": "هیچ جلسه ضبط شده‌ای پیدا نشد!"
   },
   "admin": {
     "admin_panel": "پنل مدیر کل",
@@ -179,9 +205,17 @@
       "create_account": "ایجاد حساب کاربری",
       "create_room": "ایجاد اتاق",
       "create_new_room": "ایجاد اتاق جدید",
-      "user_created_at": "ایجاد شده: {{user.created_at}}",
+      "user_created_at": "ایجاد شده: {{localizedTime}}",
       "are_you_sure_delete_account": "آیا مطمئن هستید که می‌خواهید حساب کاربری {{user.name}} را حذف کنید؟",
       "delete_account_warning": "اگر این حساب کاربری را حذف کنید، قابل بازیابی نخواهد بود.",
+      "empty_active_users": "کاربر فعالی یافت نشد",
+      "empty_active_users_subtext": "هنگامی که وضعیت یک کاربر به فعال تغییر کنید، اینجا نمایش داده خواهد شد.",
+      "empty_pending_users": "کاربری در انتظار تایید یافت نشد",
+      "empty_pending_users_subtext": "هنگامی که کاربری در انتظار تایید توسط مدیر باشد، اینجا نمایش داده خواهد شد.",
+      "empty_banned_users": "کاربر مسدود شده ای یافت نشد",
+      "empty_banned_users_subtext": "هنگامی که کاربری مسدود شود، اینجا نمایش داده خواهد شد.",
+      "empty_invited_users": "کاربر دعوت شده‌ای یافت نشد",
+      "empty_invited_users_subtext": "هنگامی که کاربری به سامانه دعوت شود، اینجا نمایش داده خواهد شد.",
       "invited": {
         "time_sent": "زمان ارسال شده",
         "valid": "معتبر"
@@ -198,10 +232,12 @@
       "not_running": "در حال اجرا نیست",
       "active": "فعال",
       "current_session": "جلسه فعلی: {{lastSession}}",
-      "last_session": "آخرین جلسه: {{lastSession}}",
+      "last_session": "آخرید جلسه: {{localizedTime}}",
       "no_meeting_yet": "هنوز هیچ جلسه‌ای وجود ندارد.",
       "delete_server_rooms": "حذف اتاق سرور",
-      "resync_recordings": "همگام‌سازی مجدد ضبط شده‌ها"
+      "resync_recordings": "همگام‌سازی مجدد ضبط شده‌ها",
+      "empty_room_list": "هنوز اتاقی ساخته نشده است!",
+      "empty_room_list_subtext": "پس از ساختن اولین اتاق، اتاق های شما اینجا ظاهر می‌شوند"
     },
     "server_recordings": {
       "server_recordings": "سرور ضبط شده‌ها",
@@ -210,7 +246,7 @@
     },
     "site_settings": {
       "site_settings": "تنظیمات سایت",
-      "customize_greenlight": "شخصی‌سازی Greenlight",
+      "customize_greenlight": "شخصی‌سازی سامانه",
       "appearance": {
         "appearance": "ظاهر",
         "brand_color": "رنگ برند",
@@ -219,7 +255,8 @@
         "brand_image": "تصویر برند",
         "click_to_upload": "برای بارگذاری کلیک کنید",
         "drag_and_drop": " یا بکشید و رها کنید",
-        "upload_brand_image_description": "هر پرونده PNG، JPG یا SVG را می‌توانید بارگذاری کنید. بسته به اندازه پرونده، ممکن است به زمان بیشتری برای بارگذاری نیاز داشته باشد تا بتوانید از آن استفاده کنید"
+        "upload_brand_image_description": "هر پرونده PNG، JPG یا SVG را می‌توانید بارگذاری کنید. بسته به اندازه پرونده، ممکن است به زمان بیشتری برای بارگذاری نیاز داشته باشد تا بتوانید از آن استفاده کنید",
+        "remove_branding_image": "حذف تصویر برند"
       },
       "administration": {
         "administration": "مدیریت",
@@ -232,6 +269,7 @@
         "enter_link": "پیوند را اینجا وارد کنید"
       },
       "settings": {
+        "settings": "تنظیمات",
         "allow_users_to_share_rooms": "به کاربران اجازه دهید، اتاق‌ها را به اشتراک بگذارند",
         "allow_users_to_share_rooms_description": "تنظیمات غیرفعال باشد، دکمه‌ها از منوی کشویی گزینه‌های اتاق حذف می‌شود و از اشتراک‌گذاری اتاق توسط کاربران جلوگیری می‌کند",
         "allow_users_to_preupload_presentation": "به کاربران اجازه دهید تا ارائه‌ها را از قبل بارگذاری کنند",
@@ -243,12 +281,12 @@
         "role_mapping_by_email_description": "با استفاده از ایمیل کاربر نقشی بهش اعطا کنید. باید در قالب: role1=email1، role2=email2 باشد",
         "enter_role_mapping_rule": "یک قانون اعطا نقش را وارد کنید",
         "resync_on_login": "همگام‌سازی مجدد داده‌های کاربر در هر بار ورود",
-        "resync_on_login_description": "هر بار که کاربر وارد سیستم می‌شود، اطلاعات کاربر را مجددا همگام‌سازی می‌کند و باعث می‌شود که ارائه‌دهنده احراز هویت خارجی همیشه با اطلاعات موجود در Greenlight مطابقت داشته باشد.",
+        "resync_on_login_description": "هر بار که کاربر وارد سیستم می‌شود، اطلاعات کاربر را مجددا همگام‌سازی می‌کند و باعث می‌شود که ارائه‌دهنده احراز هویت خارجی همیشه با اطلاعات موجود در سامانه مطابقت داشته باشد.",
         "default_role": "نقش پیش‌فرض",
         "default_role_description": "نقش پیش‌فرضی که به کاربران تازه ایجاد شده اختصاص داده می‌شود",
         "registration_method": "روش ثبت نام",
         "registration_method_description": "نحوه ثبت نام کاربران در وب‌سایت را تغییر دهید",
-        "registration_methods" : {
+        "registration_methods": {
           "open": "باز کردن ثبت نام",
           "invite": "پیوستن با دعوتنامه",
           "approval": "تایید/رد کردن"
@@ -257,6 +295,7 @@
     },
     "room_configuration": {
       "room_configuration": "پیکربندی اتاق",
+      "default": "اختیاری (پیشفرض فعال)",
       "optional": "اختیاری",
       "enabled": "فعال شد",
       "disabled": "غیرفعال شد",
@@ -264,15 +303,15 @@
         "allow_room_to_be_recorded": "اجازه دهید اتاق ضبط شود",
         "allow_room_to_be_recorded_description": "به صاحبان اتاق اجازه می‌دهد تعیین کنند که آیا می‌خواهند، اتاق را ضبط کنند یا خیر. اگر فعال باشد، مدیر همچنان باید پس از شروع جلسه، روی دکمه «ضبط» کلیک کند.",
         "require_user_signed_in": "کاربران قبل از پیوستن به جلسه، ملزم به ورود به سیستم شوند",
-        "require_user_signed_in_description": "فقط به کاربرانی که دارای حساب کاربری در Greenlight هستند، اجازه می‌دهد به جلسه بپیوندند. اگر وارد سیستم نشده باشند، هنگام تلاش برای پیوستن به اتاق، به صفحه ورود هدایت می‌شوند.",
+        "require_user_signed_in_description": "فقط به کاربرانی که دارای حساب کاربری در سامانه هستند، اجازه می‌دهد به جلسه بپیوندند. اگر وارد سیستم نشده باشند، هنگام تلاش برای پیوستن به اتاق، به صفحه ورود هدایت می‌شوند.",
         "require_mod_approval": "قبل از پیوستن به جلسه نیاز به تایید مدیر باشد",
-        "require_mod_approval_description": "هنگامی که کاربر سعی می‌کند به جلسه بپیوندد، از مدیر جلسه BigBlueButton درخواست می‌کند. در صورت تایید کاربر، می‌تواند به جلسه بپیوندد.",
+        "require_mod_approval_description": "هنگامی که کاربر سعی می‌کند به جلسه بپیوندد، از مدیر جلسه درخواست می‌کند. در صورت تایید کاربر، می‌تواند به جلسه بپیوندد.",
         "allow_any_user_to_start_meeting": "به هر کاربری اجازه دهید تا جلسه را شروع کند",
         "allow_any_user_to_start_meeting_description": "به هر کاربری اجازه دهید جلسه را در هر زمانی که خواست شروع کند. به‌طور پیش‌فرض، فقط مالک اتاق می‌تواند جلسه را شروع کند.",
         "allow_users_to_join_as_mods": "به کاربران اجازه دهید به عنوان مدیر بپیوندند",
-        "allow_users_to_join_as_mods_description": "به همه کاربران هنگام پیوستن به جلسه، در BigBlueButton اختیارات مدیر را می‌دهد",
+        "allow_users_to_join_as_mods_description": "به همه کاربران هنگام پیوستن به جلسه، اختیارات مدیر را می‌دهد",
         "mute_users_on_join": "کاربران هنگام پیوستن بی‌صدا شوند",
-        "mute_users_on_join_description": "هنگامی که کاربر به جلسه BigBlueButton می‌پیوندد، به‌طور خودکار بی‌صدا می‌شود",
+        "mute_users_on_join_description": "هنگامی که کاربر به جلسه می‌پیوندد، به‌طور خودکار بی‌صدا می‌شود",
         "viewer_access_code": "کد دسترسی بینندگان",
         "viewer_access_code_description": "به صاحبان اتاق اجازه می‌دهد تا یک کد الفبایی تصادفی داشته باشند که می‌تواند با کاربران به اشتراک بگذارند. در صورت تولید کد، برای پیوستن کاربران به جلسات اتاق الزامی است.",
         "mod_access_code": "کد دسترسی مدیر",
@@ -291,7 +330,19 @@
       "add_role": "+ ایجاد نقش",
       "create_role": "ایجاد نقش",
       "create_new_role": "ایجاد نقش جدید",
-      "no_role_found": "هیچ نقشی پیدا نشد."
+      "no_role_found": "هیچ نقشی پیدا نشد.",
+      "search_not_found": "هیچ نقشی پیدا نشد.",
+      "edit": {
+        "create_room": "ایجاد اتاق",
+        "record": "ضبط جلسات",
+        "manage_users": "مدیریت کاربران سامانه",
+        "manage_rooms": "مدیریت اتاق های سامانه",
+        "manage_recordings": "مدیریت ضبط های سامانه",
+        "manage_site_settings": "مدیریت تنظیمات سامانه",
+        "manage_roles": "مدیریت نقش های سامانه",
+        "shared_list": "نمایش در لیست بازشو اشتراک گذاری اتاق ها",
+        "room_limit": "محدودیت تعداد اتاق"
+      }
     }
   },
   "toast": {
@@ -304,10 +355,10 @@
         "password_updated": "رمز عبور به‌روز شد.",
         "account_activated": "حساب کاربری فعال شد.",
         "activation_email_sent": "ایمیل فعال‌سازی ارسال شد",
-        "challenge_passed": "چالش گذشت"
+        "reset_pwd_email_sent": "ایمیلی حاوی دستورالعمل بازنشانی رمز عبور برای شما ارسال شد. در صورتی که ایمیل را مشاهده نمی‌کنید پوشه اسپم خود را چک کنید"
       },
       "session": {
-        "signed_out": "شما با موفقیت از سیستم خارج شدید."
+        "signed_out": "با موفقیت از سیستم خارج شدید."
       },
       "room": {
         "room_created": "اتاق ایجاد شد.",
@@ -316,7 +367,6 @@
         "room_shared": "اتاق به اشتراک گذاشته شده",
         "room_unshared": "اتاق به اشتراک گذاشته نشد",
         "recordings_synced": "ضبط‌ شده‌های اتاق اکنون همگام‌سازی شده‌اند",
-        "server_room_deleted": "اتاق سرور حذف شد.",
         "room_configuration_updated": "پیکربندی اتاق به‌روزرسانی شد.",
         "room_setting_updated": "تنظیمات اتاق به‌روزرسانی شد.",
         "presentation_updated": "ارائه به‌روز شد.",
@@ -325,15 +375,22 @@
         "meeting_started": "جلسه شروع شد.",
         "access_code_copied": "کد دسترسی کپی شد.",
         "access_code_generated": "کد دسترسی تولید شد.",
-        "access_code_removed": "کد دسترسی حذف شد."
+        "access_code_deleted": "کد دسترسی حذف شد.",
+        "copied_meeting_url": "آدرس جلسه کپی شد. از این آدرس میتوانید برای دعوت دیگران به جلسه استفاده کنید"
       },
       "site_settings": {
-        "site_setting_updated": "تنظیمات سایت به‌روز شد."
+        "site_setting_updated": "تنظیمات سایت به‌روز شد.",
+        "brand_color_updated": "رنگ سامانه بروزرسانی شد.",
+        "brand_image_updated": "تصویر سامانه بروزرسانی شد.",
+        "brand_image_deleted": "تصویر سامانه حذف شد.",
+        "privacy_policy_updated": "سیاست حفظ حریم خصوصی بروزرسانی شد.",
+        "terms_of_service_updated": "شرایط خدمات بروزرسانی شد."
       },
       "recording": {
         "recording_visibility_updated": "قابلیت مشاهده ضبط به‌روزرسانی شد.",
         "recording_name_updated": "نام ضبط به‌روز شد.",
-        "recording_deleted": "ضبط حذف شد."
+        "recording_deleted": "ضبط حذف شد.",
+        "copied_urls": "آدرس ضبط کپی شد."
       },
       "role": {
         "role_created": "نقش ایجاد شد.",
@@ -349,19 +406,24 @@
       "problem_completing_action": "در تکمیل آن اقدام مشکلی وجود داشت.\nلطفا دوباره تلاش کنید.",
       "file_type_not_supported": "نوع پرونده پشتیبانی نمی‌شود.",
       "file_size_too_large": "اندازه پرونده خیلی بزرگ است.",
+      "file_upload_error": "مشکلی در بارگزاری پرونده وجود دارد.",
       "signin_required": "برای دسترسی به این صفحه باید وارد سیستم شوید",
       "roles": {
         "role_assigned": "این نقش را نمی‌توانید حذف کنید، زیرا به حداقل یک کاربر اختصاص داده شده است."
       },
       "users": {
+        "signup_error": "شما نمیتوانید تایید شوید، لطفا با مدیریت تماس بگیرید",
         "invalid_invite": "توکن دعوتنامه شما یا نامعتبر است یا نادرست است. لطفا با مدیریت تماس بگیرید تا یک توکن جدید دریافت کنید",
-        "email_exists": "یک حساب کاربری با این ایمیل در حال حاضر وجود دارد. لطفا با ایمیل دیگری دوباره امتحان کنید"
+        "email_exists": "یک حساب کاربری با این ایمیل در حال حاضر وجود دارد. لطفا با ایمیل دیگری دوباره امتحان کنید",
+        "old_password": "رمز عبور وارد شده نادرست است",
+        "pending": "حساب کاربری شما در انتظار تایید توسط مدیریت است. لطفا بعدا دوباره تلاش کنید",
+        "banned": "دسترسی شما محدود شده است. در صورتی که فکر میکنید این یک اشتباه است با مدیریت تماس بگیرید"
       },
       "rooms": {
         "room_limit": "به دلیل رسیدن به محدودیت ایجاد اتاق نمی‌توانید اتاق ایجاد کنید"
       },
       "session": {
-        "invalid_credentials": "نام‌کاربری یا رمز عبور معتبر نمی‌باشد. لطفا اعتبار خود را بررسی کنید و دوباره امتحان کنید."
+        "invalid_credentials": "نام‌کاربری یا رمز عبور معتبر نمی‌باشد. پس از بررسی مجدد، دوباره امتحان کنید."
       }
     }
   },
@@ -376,7 +438,7 @@
   "account_activation_page": {
     "title": "فعال‌سازی حساب کاربری",
     "account_unverified": "حساب کاربری شما هنوز تایید نشده است.",
-    "message": "برای استفاده از Greenlight، لطفا با دنبال کردن دستورالعمل‌های موجود در ایمیل فعال‌سازی که برای شما ارسال شده است، حساب کاربری خود را تایید کنید.",
+    "message": "برای استفاده از سامانه جلسات، لطفا با دنبال کردن دستورالعمل‌های موجود در ایمیل فعال‌سازی که برای شما ارسال شده است، حساب کاربری خود را تایید کنید.",
     "resend_activation_link": "اگر ایمیل فعال‌سازی دریافت نکرده‌اید یا در استفاده از آن مشکل دارید، روی دکمه ارسال مجدد در زیر کلیک کنید تا ایمیل فعال‌سازی جدیدی ارسال شود.",
     "resend_btn_lbl": "ارسال مجدد تائیدیه"
   },
@@ -406,6 +468,40 @@
       "password_confirmation": {
         "required": "لطفا رمز عبور را برای تایید تکرار کنید",
         "match": "رمزهای عبور با هم یکسان نمی‌باشند"
+      },
+      "emails": {
+        "required": "حداقل یک ایمیل معتبر وارد کنید",
+        "list": "ایمیل هارا با استفاده از \",\" از هم جدا کنید (user@users.com,user1@users.com,user2@users.com)"
+      },
+      "role_name": {
+        "required": "نام نقش را وارد کنید"
+      },
+      "role": {
+        "limit": {
+          "required": "محدودیت تعداد اتاق را وارد کنید",
+          "min": "تعداد اتاق نمی‌تواند کمتر از ۰ باشد",
+          "max": "تعداد اتاق نمی‌تواند بیشتر از ۱۰۰ باشد"
+        },
+        "type": {
+          "error": "شما باید یک عدد مشخص کنید"
+        }
+      },
+      "room": {
+        "name": {
+          "required": "نام اتاق را وارد کنید",
+          "min": "نام اتاق باید حداقل شامل ۲ کاراکتر باشد"
+        }
+      },
+      "url": {
+        "invalid": "آدرس نامعتبر"
+      }
+    },
+    "room": {
+      "fields": {
+        "name": {
+          "label": "نام اتاق",
+          "placeholder": "نام اتاق را وارد کنید..."
+        }
       }
     },
     "user": {
@@ -443,6 +539,68 @@
             "label": "مرا به خاطر بسپار"
           }
         }
+      },
+      "change_password": {
+        "fields": {
+          "old_password": {
+            "label": "رمز عبور فعلی",
+            "placeholder": "رمز عبور فعلی را وارد کنید"
+          },
+          "new_password": {
+            "label": "رمز عبود جدید",
+            "placeholder": "رمز عبور جدید را وارد کنید"
+          },
+          "password_confirmation": {
+            "label": "تایید رمز عبور",
+            "placeholder": "رمز عبور جدید را تایید کنید"
+          }
+        },
+        "validations": {
+          "old_password": {
+            "required": "رمز عبور فعلی خود را وارد کنید"
+          }
+        }
+      },
+      "forget_password": {
+        "fields": {
+          "email": {
+            "label": "ایمیل",
+            "placeholder": "ایمیل حساب کاربری را وارد کنید"
+          }
+        },
+        "validations": {
+          "email": {
+            "required": "ایمیل حساب کاربری را وارد کنید"
+          }
+        }
+      },
+      "reset_password": {
+        "fields": {
+          "new_password": {
+            "label": "رمز عبور جدید",
+            "placeholder": "رمز عبور جدید را وارد کنید"
+          },
+          "password_confirmation": {
+            "label": "تایید رمز جدید",
+            "placeholder": "رمز عبور جدید را تایید کنید"
+          }
+        }
+      },
+      "update_user": {
+        "fields": {
+          "full_name": {
+            "label": "نام کامل"
+          },
+          "email": {
+            "label": "ایمیل"
+          },
+          "language": {
+            "label": "زبان"
+          },
+          "role": {
+            "label": "نقش"
+          }
+        }
       }
     },
     "admin": {
@@ -463,6 +621,28 @@
           "password_confirmation": {
             "label": "تایید رمز عبور",
             "placeholder": "تایید رمز عبور"
+          }
+        }
+      },
+      "invite_user": {
+        "fields": {
+          "emails": {
+            "label": "ایمیل ها"
+          }
+        }
+      },
+      "site_settings": {
+        "fields": {
+          "value": {
+            "placeholder": "آدرس را اینجا وارد کنید..."
+          }
+        }
+      },
+      "roles": {
+        "fields": {
+          "name": {
+            "label": "نام",
+            "placeholder": "نامی برای نقش مورد نظر انتخاب کنید..."
           }
         }
       }
