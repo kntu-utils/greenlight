@@ -27,7 +27,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application.rtl" %>
+    <% if I18n.locale == :fa %>
+      <%= stylesheet_link_tag "application.rtl" %>
+    <% else %>
+      <%= stylesheet_link_tag "application" %>
+    <% end %>
+
     <%= javascript_include_tag "main", defer: true %>
   </head>
 
