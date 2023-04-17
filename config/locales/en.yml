@@ -46,8 +46,11 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  head:
+    title: KNTU Online Meeting
   opengraph:
-    description: Learn using BigBlueButton, the trusted open-source web conferencing solution that enables seamless virtual collaboration and online learning experiences.
+    title: KNTU Online Meeting
+    description: KNTU Online Meetings and Conferences
   meeting:
     moderator_message: "To invite someone to the meeting, send them this link:"
     access_code: "Access Code: %{code}"
