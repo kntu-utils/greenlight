@@ -148,7 +148,7 @@
       "allow_any_user_to_start": "به هر کاربری اجازه دهید این جلسه را شروع کند",
       "all_users_join_as_mods": "همه کاربران به عنوان مدیر عضو شوند",
       "mute_users_on_join": "کاربران هنگام پیوستن بی‌صدا شوند",
-      "generate": "تولید کن",
+      "generate": "تولید کد",
       "access_code": "کد دسترسی",
       "access_code_placeholder": "کد دسترسی را وارد کنید",
       "mod_access_code": "کد دسترسی مدیر",

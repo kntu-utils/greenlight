@@ -38,10 +38,8 @@ export default function HomePage() {
   useEffect(
     () => {
       // Todo: Use PermissionChecker.
-      if (!currentUser.stateChanging && currentUser.signed_in && currentUser.permissions.CreateRoom === 'true') {
+      if (!currentUser.stateChanging && currentUser.signed_in) {
         navigate('/rooms');
-      } else if (!currentUser.stateChanging && currentUser.signed_in && currentUser.permissions.CreateRoom === 'false') {
-        navigate('/home');
       } else if (!currentUser.stateChanging && !currentUser.signed_in) {
         navigate('/signin');
       }
