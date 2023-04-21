@@ -61,7 +61,7 @@ export default function NavbarSignedIn({ currentUser }) {
             <IdentificationIcon className="hi-s me-3" />
             {t('user.profile.profile')}
           </Nav.Link>
-          <Nav.Link eventKey={2} href="https://docs.bigbluebutton.org/greenlight/gl-overview.html">
+          <Nav.Link eventKey={2} href="https://www.aparat.com/v/uFQjn">
             <QuestionMarkCircleIcon className="hi-s me-3" />
             {t('help_center')}
           </Nav.Link>
