@@ -33,7 +33,7 @@ class ExternalController < ApplicationController
       verified: true
     }
 
-    user = User.find_by(external_id: credentials['uid'], provider:)
+    user = User.find_by(email: credentials['info']['email'], provider:)
     new_user = user.blank?
 
     registration_method = SettingGetter.new(setting_name: 'RegistrationMethod', provider: current_provider).call
@@ -56,10 +56,10 @@ class ExternalController < ApplicationController
     end
 
     # Set to pending if registration method is approval
-    if registration_method == SiteSetting::REGISTRATION_METHODS[:approval]
-      user.pending! if new_user
-      return redirect_to '/pending' if user.pending?
-    end
+    # if registration_method == SiteSetting::REGISTRATION_METHODS[:approval]
+    #   user.pending! if new_user
+    #   return redirect_to '/pending' if user.pending?
+    # end
 
     user.generate_session_token!
     session[:session_token] = user.session_token
