@@ -35,9 +35,12 @@ RUN apk add --no-cache \
     yaml-dev \
     zlib-dev \
     && ( echo 'install: --no-document' ; echo 'update: --no-document' ) >>/etc/gemrc
-COPY package.json package-lock.json yarn.lock Gemfile.lock Gemfile ./
-RUN bundle install -j4 \
-    && yarn install
+
+COPY Gemfile.lock Gemfile ./
+RUN bundle install -j4
+
+COPY package.json package-lock.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 COPY . ./
 
