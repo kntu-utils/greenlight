@@ -55,7 +55,11 @@ class SettingGetter
     if site_setting.setting.name == 'BrandingImage'
       return rails_blob_path site_setting.image, only_path: true if site_setting.image.attached?
 
-      return ActionController::Base.helpers.image_path('bbb_logo.png')
+      if I18n.locale == :fa
+        return ActionController::Base.helpers.image_path('bbb_logo.png')
+      else
+        return ActionController::Base.helpers.image_path('bbb_english.png')
+      end
     end
 
     case site_setting.value
