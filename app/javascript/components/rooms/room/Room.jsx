@@ -16,7 +16,7 @@
 
 import React from 'react';
 import {
-  Stack, Button, Col, Row,
+  Stack, Button, Col, Row, ButtonGroup,
 } from 'react-bootstrap';
 import {
   Link, Navigate, useLocation, useParams,
@@ -45,9 +45,11 @@ export default function Room() {
   const location = useLocation();
   const localizedTime = localizeDayDateTimeString(room?.last_session, currentUser?.language);
 
-  function copyInvite() {
-    navigator.clipboard.writeText(`${window.location}/join`);
-    toast.success(t('toast.success.room.copied_meeting_url'));
+  function copy(text, title=null) {
+    navigator.clipboard.writeText(text);
+    if (title) {
+      toast.success(t('toast.copy.success', {title}));
+    }
   }
 
   // Custom logic to redirect from Rooms page to join page if this isnt the users room and they're not allowed to view it
@@ -99,10 +101,18 @@ export default function Room() {
                 t('room.meeting.start_meeting')
               )}
             </Button>
-            <Button variant="brand-outline" className="mt-1 mx-2 float-end" onClick={() => copyInvite()}>
-              <Square2StackIcon className="hi-s me-1" />
-              { t('copy') }
-            </Button>
+            <ButtonGroup className="float-end mx-2">
+              <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join`, t('room.copy_fa'))}>
+                { t('room.copy_fa') }
+              </Button>
+              <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join?lng=en`, t('room.copy_en'))}>
+                { t('room.copy_en') }
+              </Button>
+              {room?.settings?.glViewerAccessCode &&
+                  <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(room.settings.glViewerAccessCode)}>
+                    {t('room.copy_code')}
+                  </Button>}
+            </ButtonGroup>
           </Col>
         </Row>
       </div>

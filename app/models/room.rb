@@ -40,7 +40,7 @@ class Room < ApplicationRecord
   before_validation :set_friendly_id, :set_meeting_id, on: :create
   after_create :create_meeting_options
 
-  attr_accessor :shared, :active, :participants
+  attr_accessor :shared, :active, :participants, :settings
 
   scope :with_provider, ->(current_provider) { where(user: { provider: current_provider }) }
 

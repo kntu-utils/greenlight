@@ -113,6 +113,9 @@
     "search_not_found": "اتاقی یافت نشد",
     "rooms_list_is_empty": "شما هنوز هیچ اتاقی ندارید!",
     "rooms_list_empty_create_room": "با کلیک بر روی دکمه زیر و وارد کردن نام اتاق، اولین اتاق خود را ایجاد کنید.",
+    "copy_fa": "آدرس نسخه فارسی",
+    "copy_code": "کد دسترسی",
+    "copy_en": "آدرس نسخه لاتین",
     "meeting": {
       "start_meeting": "شروع جلسه",
       "join_meeting": "به جلسه بپیوندید",
@@ -244,7 +247,7 @@
       "empty_room_list_subtext": "پس از ساختن اولین اتاق، اتاق های شما اینجا ظاهر می‌شوند"
     },
     "server_recordings": {
-      "server_recordings": "سرور ضبط شده‌ها",
+      "server_recordings": "ویدیو های ضبط شده",
       "latest_recordings": "آخرین موارد ضبط شده",
       "no_recordings_found": "هیچ ضبطی یافت نشد."
     },
@@ -350,6 +353,9 @@
     }
   },
   "toast": {
+    "copy": {
+      "success": "{{title}} با موفقیت کپی شد"
+    },
     "success": {
       "user": {
         "user_created": "کاربر ایجاد شد.",

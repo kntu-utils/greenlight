@@ -60,7 +60,17 @@ module Api
       def show
         RunningMeetingChecker.new(rooms: @room, provider: current_provider).call if @room.online
 
+        settings = RoomSettingsGetter.new(
+          room_id: @room.id,
+          provider: current_provider,
+          current_user:,
+          show_codes: true,
+          only_enabled: true
+        ).call
+
         @room.shared = current_user.shared_rooms.include?(@room)
+
+        @room.settings = settings
 
         render_data data: @room, serializer: CurrentRoomSerializer, status: :ok
       end
