@@ -52,7 +52,8 @@ class BigBlueButtonApi
       {
         role:,
         avatarURL: avatar_url,
-        createTime: room.last_session&.to_datetime&.strftime('%Q')
+        createTime: room.last_session&.to_datetime&.strftime('%Q'),
+        'userdata-bbb_override_default_locale'.to_sym => I18n.locale
       }.compact
     )
   end
