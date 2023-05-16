@@ -22,7 +22,7 @@ module Api
       include Authorizable
 
       serialization_scope :view_context
-      before_action :ensure_valid_request, :ensure_authenticated
+      before_action :ensure_valid_request, :ensure_authenticated, :set_locale
 
       # For requests that raised an unkown exception.
       # Note: The order of each rescue is important (The highest has the lowest priority).
@@ -42,6 +42,10 @@ module Api
       end
 
       # TODO: amir - Better Error handling.
+
+      def set_locale
+        I18n.locale = current_user&.language || request.params['lng'] || request.cookies['lng'] || :fa
+      end
 
       def log_exception(exception)
         logger.error exception.message

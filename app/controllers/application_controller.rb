@@ -39,11 +39,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    if current_user&.language
-      I18n.locale = current_user.language
-    else
-      I18n.locale = :fa # TODO: read from configuration
-    end
+    I18n.locale = current_user&.language || request.params['lng'] || request.cookies['lng'] || :fa
   end
 
   # Returns whether hcaptcha is enabled by checking if ENV variables are set
