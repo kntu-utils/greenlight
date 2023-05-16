@@ -18,16 +18,38 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
 
+const detectUserLanguage = () => {
+    // Check query parameter
+    const queryParams = new URLSearchParams(window.location.search);
+    const queryLanguage = queryParams.get('lng');
+
+    if (queryLanguage) {
+        document.cookie = `lng=${queryLanguage}; path=/`;
+        return queryLanguage;
+    }
+
+    // Check cookies
+    const cookieLanguage = document.cookie
+        .split(';')
+        .map((cookie) => cookie.split('='))
+        .find(([name]) => name.trim() === 'lng');
+
+    if (cookieLanguage) {
+        return cookieLanguage[1];
+    }
+
+    // Default language
+    return 'fa';
+};
+
+
 i18next
   .use(initReactI18next)
   .use(HttpApi)
   .init({
-    lng: 'fa',
+    lng: detectUserLanguage(),
     backend: {
       loadPath: `${process.env.RELATIVE_URL_ROOT}/api/v1/locales/{{lng}}.json`,
-    },
-    detection: {
-      enabled: false,
     },
     load: 'currentOnly',
     fallbackLng: (locale) => {
