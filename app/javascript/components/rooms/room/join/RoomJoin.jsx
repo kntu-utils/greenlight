@@ -70,6 +70,7 @@ export default function RoomJoin() {
 
   const handleJoin = (data) => {
     document.cookie = 'location=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT'; // delete redirect location
+    localStorage.setItem('user_name', methods.getValues('name'))
 
     if (publicRoom?.data.viewer_access_code && !methods.getValues('access_code')) {
       return methods.setError('access_code', { type: 'required', message: t('room.settings.access_code_required') }, { shouldFocus: true });
@@ -85,6 +86,13 @@ export default function RoomJoin() {
       methods.setValue('name', currentUser.name);
     }
   }, [currentUser?.name]);
+
+  useEffect(() => {
+    const name = localStorage.getItem('user_name');
+    if (name && !methods.getValues('name')) {
+      methods.setValue('name', name);
+    }
+  }, [])
 
   useEffect(() => {
     // Room channel subscription:
