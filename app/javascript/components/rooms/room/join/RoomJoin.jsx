@@ -70,7 +70,7 @@ export default function RoomJoin() {
 
   const handleJoin = (data) => {
     document.cookie = 'location=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT'; // delete redirect location
-    localStorage.setItem('user_name', methods.getValues('name'))
+    localStorage.setItem('user_name', methods.getValues('name'));
 
     if (publicRoom?.data.viewer_access_code && !methods.getValues('access_code')) {
       return methods.setError('access_code', { type: 'required', message: t('room.settings.access_code_required') }, { shouldFocus: true });
@@ -92,7 +92,7 @@ export default function RoomJoin() {
     if (name && !methods.getValues('name')) {
       methods.setValue('name', name);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     // Room channel subscription:
@@ -258,18 +258,9 @@ export default function RoomJoin() {
         </Card.Footer>
       </Card>
       {!currentUser?.signed_in && (
-        env?.OPENID_CONNECT ? (
-          <Stack direction="horizontal" className="d-flex justify-content-center text-muted mt-3"> {t('authentication.already_have_account')}
-            <RegularForm action="/auth/openid_connect" method="POST" data-turbo="false">
-              <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name="csrf-token"]').content} />
-              <Button variant="link" className="btn-sm fs-6 cursor-pointer ms-2 ps-0" type="submit">{t('authentication.sign_in')}</Button>
-            </RegularForm>
-          </Stack>
-        ) : (
-          <div className="text-center text-muted mt-3"> {t('authentication.already_have_account')}
-            <Link to={`/signin?location=${path}`} className="text-link ms-1"> {t('authentication.sign_in')} </Link>
-          </div>
-        )
+      <div className="text-center text-muted mt-3"> {t('authentication.already_have_account')}
+        <Link to={`/signin?location=${path}`} className="text-link ms-1"> {t('authentication.sign_in')} </Link>
+      </div>
       )}
     </div>
   );

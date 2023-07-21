@@ -44,6 +44,7 @@
   },
   "authentication": {
     "sign_in": "Sign In",
+    "ldap_sign_in": "Sign in with KNTU account",
     "sign_up": "Sign Up",
     "sign_out": "Sign Out",
     "email": "Email",
@@ -56,7 +57,22 @@
     "dont_have_account": "Don't have an account?",
     "create_account": "Create Account",
     "create_an_account": "Create an Account",
-    "already_have_account": "Already have an account?"
+    "already_have_account": "Already have an account?",
+    "new_policy": {
+      "header": "Respectfully,\n\nWe would like to inform you that in order to enhance user experience and provide more convenience, some changes have been made to the login policies of our system. We kindly request you to pay close attention to these updates.",
+      "ldap_sign_in": {
+        "title": "Login with University Email",
+        "description": "In accordance with the new system policies, the option of 'Login with University Email' has been introduced, enabling users with kntu.ac.ir university email to log in. This measure has been implemented to enhance security and facilitate access to their user accounts for those who have used their university email for registration. We strongly recommend all users with a university email to utilize this login method."
+      },
+      "ldap_mails_new": {
+        "title": "Transfer to University Email",
+        "description": "Considering the recent changes in system policies, all previous owner rooms registered with non-university email addresses have been transferred to the corresponding university email accounts. This step has been taken to ensure accurate data alignment and coordination. Henceforth, you can access the system through your university email."
+      },
+      "password_reset": {
+        "title": "Password Recovery",
+        "description": "As part of our recent system upgrades and updates, we have introduced the 'Forgot Password?' feature, allowing you to reset your password conveniently. In case you forget your password, you can use this quick solution to reset your password. Additionally, please be informed that your old passwords have been automatically reset."
+      }
+    }
   },
   "user": {
     "user": "User",

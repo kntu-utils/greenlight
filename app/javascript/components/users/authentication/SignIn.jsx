@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import SigninForm from './forms/SigninForm';
 import Logo from '../../shared_components/Logo';
 import useSiteSetting from '../../../hooks/queries/site_settings/useSiteSetting';
+import SignInPolicyModal from './modals/SignInPolicyModal';
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ export default function SignIn() {
         </span>
         )}
       </Card>
+      <SignInPolicyModal />
     </div>
   );
 }

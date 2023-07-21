@@ -18,7 +18,7 @@
 
 import React, { useRef, useCallback } from 'react';
 import {
-  Button, Col, Row, Stack,
+  Button, Col, Form as RegularForm, Row, Stack,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -29,9 +29,11 @@ import useCreateSession from '../../../../hooks/mutations/sessions/useCreateSess
 import useSignInForm from '../../../../hooks/forms/users/authentication/useSignInForm';
 import HCaptcha from '../../../shared_components/utilities/HCaptcha';
 import FormCheckBox from '../../../shared_components/forms/controls/FormCheckBox';
+import useEnv from '../../../../hooks/queries/env/useEnv';
 
 export default function SigninForm() {
   const { t } = useTranslation();
+  const { data: env } = useEnv();
   const { methods, fields } = useSignInForm();
   const createSessionAPI = useCreateSession();
   const captchaRef = useRef(null);
@@ -44,24 +46,35 @@ export default function SigninForm() {
   }, [captchaRef.current, createSessionAPI.mutate]);
 
   return (
-    <Form methods={methods} onSubmit={handleSubmit}>
-      <FormControl field={fields.email} type="email" autoFocus />
-      <FormControl field={fields.password} type="password" />
-      <Row>
-        <Col>
-          <FormCheckBox field={fields.extend_session} />
-        </Col>
-        <Col>
-          <Link to="/forget_password" className="text-link float-end small"> {t('authentication.forgot_password')} </Link>
-        </Col>
-      </Row>
-      <HCaptcha ref={captchaRef} />
-      <Stack className="mt-1" gap={1}>
-        <Button variant="brand" className="w-100 my-3 py-2" type="submit" disabled={createSessionAPI.isLoading}>
-          {createSessionAPI.isLoading && <Spinner className="me-2" />}
-          {t('authentication.sign_in')}
-        </Button>
-      </Stack>
-    </Form>
+    <>
+      <Form methods={methods} onSubmit={handleSubmit}>
+        <FormControl field={fields.email} type="email" autoFocus />
+        <FormControl field={fields.password} type="password" />
+        <Row>
+          <Col>
+            <FormCheckBox field={fields.extend_session} />
+          </Col>
+          <Col>
+            <Link to="/forget_password" className="text-link float-end small"> {t('authentication.forgot_password')} </Link>
+          </Col>
+        </Row>
+        <HCaptcha ref={captchaRef} />
+        <Stack className="mt-1" gap={1}>
+          <Button variant="brand" className="w-100 mt-3 py-2" type="submit" disabled={createSessionAPI.isLoading}>
+            {createSessionAPI.isLoading && <Spinner className="me-2" />}
+            {t('authentication.sign_in')}
+          </Button>
+        </Stack>
+      </Form>
+      {env?.OPENID_CONNECT
+    && (
+    <RegularForm action="/auth/openid_connect" method="POST" data-turbo="false">
+      <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name="csrf-token"]').content} />
+      <Button variant="brand-outline" className="w-100 my-3 py-2" type="submit" disabled={createSessionAPI.isLoading}>
+        {t('authentication.ldap_sign_in')}
+      </Button>
+    </RegularForm>
+    )}
+    </>
   );
 }

@@ -195,6 +195,10 @@ input.search-bar {
   box-shadow: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06) !important;
 }
 
+.text-justify {
+  text-align: justify;
+}
+
 #footer {
   margin-top: $footer-buffer-height;
   max-height: $footer-height;
