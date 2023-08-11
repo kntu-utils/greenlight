@@ -32,8 +32,8 @@ module Api
 
         user = User.find_by email: params[:user][:email]
 
-        # Silently fail for unfound or external users.
-        return render_data status: :ok unless user && !user.external_id?
+        # Silently fail for unfound users.
+        return render_data status: :ok unless user
 
         token = user.generate_reset_token!
 
