@@ -32,7 +32,7 @@ export default function ForgetPassword() {
       <Card className="col-xl-4 col-lg-6 col-md-8 col-10 mx-auto p-4 border-0 card-shadow">
         <Card.Title className="text-center pb-2"> { t('user.account.reset_password')} </Card.Title>
         <ForgetPwdForm />
-        <span className="text-center text-muted small"> { t('or') }
+        <span className="text-center text-muted small mt-2"> { t('or') }
           <Link to="/signin" className="text-link"> { t('authentication.sign_in') } </Link>
         </span>
       </Card>
