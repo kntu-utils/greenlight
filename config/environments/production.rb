@@ -79,8 +79,10 @@ Rails.application.configure do
       enable_starttls: ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_STARTTLS', nil)),
       tls: ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_TLS', nil)),
       openssl_verify_mode: ENV.fetch('SMTP_SSL_VERIFY', 'true') == 'false' ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER,
-      open_timeout: ENV.fetch('SMTP_TIMEOUT', '300').to_i,
-      read_timeout: ENV.fetch('SMTP_TIMEOUT', '300').to_i
+      # open_timeout: ENV.fetch('SMTP_TIMEOUT', '300').to_i,
+      # read_timeout: ENV.fetch('SMTP_TIMEOUT', '300').to_i
+      open_timeout: 300,
+      read_timeout: 300
     }.compact
 
     config.action_mailer.smtp_settings = smtp_settings
