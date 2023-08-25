@@ -254,7 +254,7 @@
       "running": "در حال اجرا",
       "not_running": "در حال اجرا نیست",
       "active": "فعال",
-      "current_session": "جلسه فعلی: {{lastSession}}",
+      "current_session": "جلسه فعلی: {{localizedTime}}",
       "last_session": "آخرید جلسه: {{localizedTime}}",
       "no_meeting_yet": "هنوز هیچ جلسه‌ای وجود ندارد.",
       "delete_server_rooms": "حذف اتاق سرور",
