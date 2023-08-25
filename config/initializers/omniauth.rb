@@ -28,7 +28,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              client_options: {
                identifier: ENV.fetch('OPENID_CONNECT_CLIENT_ID'),
                secret: ENV.fetch('OPENID_CONNECT_CLIENT_SECRET'),
-               redirect_uri: File.join(ENV.fetch('OPENID_CONNECT_REDIRECT', ''), 'auth', 'openid_connect', 'callback')
+               redirect_uri: File.join(ENV.fetch('OPENID_CONNECT_REDIRECT', ''), 'b', 'auth', 'openid_connect', 'callback')
              }
   end
 end
