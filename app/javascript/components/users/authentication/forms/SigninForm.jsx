@@ -68,7 +68,7 @@ export default function SigninForm() {
       </Form>
       {env?.OPENID_CONNECT
     && (
-    <RegularForm action="/b/auth/openid_connect" method="POST" data-turbo="false">
+    <RegularForm action={`${env?.URL_PREFIX}/auth/openid_connect`} method="POST" data-turbo="false">
       <input type="hidden" name="authenticity_token" value={document.querySelector('meta[name="csrf-token"]').content} />
       <Button variant="brand-outline" className="w-100 my-3 py-2" type="submit" disabled={createSessionAPI.isLoading}>
         {t('authentication.ldap_sign_in')}

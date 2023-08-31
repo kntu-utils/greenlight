@@ -27,7 +27,8 @@ module Api
         render_data data: {
           OPENID_CONNECT: ENV['OPENID_CONNECT_ISSUER'].present?,
           HCAPTCHA_KEY: ENV.fetch('HCAPTCHA_SITE_KEY', nil),
-          VERSION_TAG: ENV.fetch('VERSION_TAG', '')
+          VERSION_TAG: ENV.fetch('VERSION_TAG', ''),
+          URL_PREFIX: ENV.fetch('RELATIVE_URL_ROOT', '')
         }, status: :ok
       end
     end
