@@ -45,7 +45,6 @@ export default function SharedAccess() {
           <div>
             <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
           </div>
-          { !room.shared && (
             <Modal
               modalButton={(
                 <Button
@@ -59,7 +58,6 @@ export default function SharedAccess() {
               size="lg"
               id="shared-access-modal"
             />
-          )}
         </Stack>
         <Card className="border-0 card-shadow mt-3">
           <Card.Body className="p-0">
