@@ -31,7 +31,7 @@ RUN apk update \
 
 FROM base as prod
 
-ARG PACKAGES='libpq-dev tzdata imagemagick yarn bash'
+ARG PACKAGES='libpq-dev tzdata imagemagick yarn bash git'
 COPY --from=build $RAILS_ROOT/vendor/bundle ./vendor/bundle
 COPY package.json yarn.lock ./
 RUN apk update \
