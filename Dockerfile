@@ -22,11 +22,8 @@ RUN bundle config --local deployment 'true' \
 FROM base as build
 
 ARG PACKAGES='alpine-sdk libpq-dev'
-COPY gems ./
-RUN pwd
-RUN ls -ltrh
+COPY gems ./gems
 COPY Gemfile Gemfile.lock ./
-RUN ls -ltrh /usr/src/app/gems
 RUN apk update \
     && apk add --update --no-cache ${PACKAGES} \
     && bundle install --no-cache \
