@@ -23,7 +23,8 @@ FROM base as build
 
 ARG PACKAGES='alpine-sdk libpq-dev'
 COPY gems ./
-RUN ls -ltrh /usr/src/app/gems
+RUN pwd
+RUN ls -ltrh
 COPY Gemfile Gemfile.lock ./
 RUN ls -ltrh /usr/src/app/gems
 RUN apk update \
