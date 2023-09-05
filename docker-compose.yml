@@ -10,6 +10,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=
+    ports:
+      - "5432:5432"
 
   redis:
     image: redis:6.2-alpine3.17
@@ -17,19 +19,22 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/redis/database_data:/data
-
-  greenlight-v3:
-    entrypoint: [bin/start]
-    image: mahdilotfi/greenlight:latest
-    container_name: greenlight-v3
-    restart: unless-stopped
-    env_file: .env
     ports:
-      - 127.0.0.1:5050:3000
-    logging:
-      driver: journald
-    volumes:
-      - ./data/greenlight-v3/storage:/usr/src/app/storage
-    depends_on:
-      - postgres
-      - redis
+      - "6379:6379"
+
+#  greenlight-v3:
+#    entrypoint: [bin/start]
+##    image: mahdilotfi/greenlight:latest
+#    build: .
+#    container_name: greenlight-v3
+#    restart: unless-stopped
+#    env_file: .env
+#    ports:
+#      - 127.0.0.1:3000:3000
+#    logging:
+#      driver: journald
+#    volumes:
+#      - ./data/greenlight-v3/storage:/usr/src/app/storage
+#    depends_on:
+#      - postgres
+#      - redis
