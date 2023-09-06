@@ -9,10 +9,30 @@ module OpenIDConnect
     end
 
     def userinfo!(params = {})
-      hash = resource_request do
-        get client.userinfo_uri, params
-      end
-      ResponseObject::UserInfo.new hash
+      payload = JWT.decode(access_token, nil, false, algorithm: 'HS256')
+      payload_hash = payload[0].slice(
+        'sub',
+        'name',
+        'given_name',
+        'family_name',
+        'middle_name',
+        'nickname',
+        'preferred_username',
+        'profile',
+        'picture',
+        'website',
+        'email',
+        'email_verified',
+        'gender',
+        'birthdate',
+        'zoneinfo',
+        'locale',
+        'phone_number',
+        'phone_number_verified',
+        'address',
+        'updated_at'
+      )
+      ResponseObject::UserInfo.new ActiveSupport::HashWithIndifferentAccess.new(payload_hash)
     end
 
     private
