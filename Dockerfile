@@ -22,6 +22,7 @@ RUN bundle config --local deployment 'true' \
 FROM base as build
 
 ARG PACKAGES='alpine-sdk libpq-dev'
+COPY gems ./gems
 COPY Gemfile Gemfile.lock ./
 RUN apk update \
     && apk add --update --no-cache ${PACKAGES} \
@@ -30,7 +31,7 @@ RUN apk update \
 
 FROM base as prod
 
-ARG PACKAGES='libpq-dev tzdata imagemagick yarn bash'
+ARG PACKAGES='libpq-dev tzdata imagemagick yarn bash git'
 COPY --from=build $RAILS_ROOT/vendor/bundle ./vendor/bundle
 COPY package.json yarn.lock ./
 RUN apk update \
