@@ -80,7 +80,6 @@ export default function SharedAccess() {
                           </Stack>
                         </td>
                         <td>
-                          {!room.shared && (
                           <Button
                             variant="icon"
                             className="float-end pe-2"
@@ -88,7 +87,6 @@ export default function SharedAccess() {
                           >
                             <TrashIcon className="hi-s" />
                           </Button>
-                          )}
                         </td>
                       </tr>
                     ))
