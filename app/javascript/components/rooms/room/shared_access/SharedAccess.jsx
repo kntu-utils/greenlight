@@ -45,19 +45,19 @@ export default function SharedAccess() {
           <div>
             <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
           </div>
-            <Modal
-              modalButton={(
-                <Button
-                  variant="brand-outline"
-                  className="ms-auto"
-                >{t('room.shared_access.add_share_access')}
-                </Button>
+          <Modal
+            modalButton={(
+              <Button
+                variant="brand-outline"
+                className="ms-auto"
+              >{t('room.shared_access.add_share_access')}
+              </Button>
 )}
-              title={t('room.shared_access.share_room_access')}
-              body={<SharedAccessForm />}
-              size="lg"
-              id="shared-access-modal"
-            />
+            title={t('room.shared_access.share_room_access')}
+            body={<SharedAccessForm />}
+            size="lg"
+            id="shared-access-modal"
+          />
         </Stack>
         <Card className="border-0 card-shadow mt-3">
           <Card.Body className="p-0">
@@ -75,8 +75,11 @@ export default function SharedAccess() {
                       <tr key={user.id} className="align-middle">
                         <td>
                           <Stack direction="horizontal" className="py-2">
-                            <Avatar avatar={user.avatar} size="small" />
-                            <h6 className="text-brand mb-0 ps-3"> {user.name} </h6>
+                            <Avatar avatar={user.avatar} size="small" className="px-3" />
+                            <div className="d-flex flex-column">
+                              <h6 className="text-brand mb-0">{user.name}</h6>
+                              <span className="small text-muted">{user.email}</span>
+                            </div>
                           </Stack>
                         </td>
                         <td>

@@ -60,16 +60,19 @@ export default function SharedAccessForm({ handleClose }) {
                         >
                           <td>
                             <Stack direction="horizontal" className="py-2">
-                              <Form.Label className="w-100 mb-0 text-brand">
+                              <Form.Label className="w-100 mb-0 text-brand d-flex align-items-center">
                                 <Form.Check
                                   id={`${user.id}-checkbox`}
                                   type="checkbox"
                                   value={user.id}
-                                  className="d-inline-block"
                                   {...register('shared_users')}
                                 />
-                                <Avatar avatar={user.avatar} size="small" className="d-inline-block px-3" />
-                                {user.name}
+                                <Avatar avatar={user.avatar} size="small" className="px-3" />
+                                <div className="d-flex flex-column">
+                                  {user.name}
+                                  <br />
+                                  <span className="small text-muted">{user.email}</span>
+                                </div>
                               </Form.Label>
                             </Stack>
                           </td>
