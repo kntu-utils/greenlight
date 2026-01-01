@@ -17,7 +17,6 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  MAX_AVATAR_SIZE = 3_000_000
   # Reset token max validity period.
   # It's advised to not increase this to more than 1 hour.
   RESET_TOKEN_VALIDITY_PERIOD = 1.hour
@@ -36,10 +35,10 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  enum status: { active: 0, pending: 1, banned: 2 }
+  enum :status, { active: 0, pending: 1, banned: 2 }
 
   validates :name, presence: true,
-                   length: { minimum: 2, maximum: 255 } # TODO: amir - Change into full_name or seperate first and last name.
+                   length: { minimum: 1, maximum: 255 } # TODO: amir - Change into full_name or seperate first and last name.
 
   validates :email,
             format: /\A[\w\-.+]+@[\w\-.]+\.[a-z]+\z/i,
@@ -59,9 +58,9 @@ class User < ApplicationRecord
             on: %i[create update], if: :password_digest_changed?, unless: :external_id?
 
   validates :avatar,
-            dimension: { width: 300, height: 300 },
-            content_type: %i[png jpg jpeg svg],
-            size: { less_than: 3.megabytes }
+            dimension: { width: { in: 1..300 }, height: { in: 1..300 } },
+            content_type: Rails.configuration.uploads[:images][:formats],
+            size: { less_than: Rails.configuration.uploads[:images][:max_size] }
 
   validates :reset_digest, uniqueness: true, if: :reset_digest?
   validates :verification_digest, uniqueness: true, if: :verification_digest?
@@ -72,6 +71,7 @@ class User < ApplicationRecord
   validate :check_user_role_provider, if: :role_changed?
 
   before_validation :set_session_token, on: :create
+  before_save :scan_avatar_for_virus
 
   scope :with_provider, ->(current_provider) { where(provider: current_provider) }
 
@@ -81,8 +81,8 @@ class User < ApplicationRecord
     all
   end
 
-  def self.name_search(input)
-    return where('users.name ILIKE :input', input: "%#{input}%") if input
+  def self.shared_access_search(input)
+    return where('users.name ILIKE :input OR users.email ILIKE :input', input: "%#{input}%") if input
 
     all
   end
@@ -115,18 +115,18 @@ class User < ApplicationRecord
 
   # Checkes the expiration of a token.
   def self.reset_token_expired?(sent_at)
-    Time.current > (sent_at.in(RESET_TOKEN_VALIDITY_PERIOD))
+    Time.current > sent_at.in(RESET_TOKEN_VALIDITY_PERIOD)
   end
 
   # Gives the session token and expiry a default value before saving
   def set_session_token
     self.session_token = User.generate_digest(SecureRandom.alphanumeric(40))
-    self.session_expiry = 6.hours.from_now
+    self.session_expiry = 24.hours.from_now
   end
 
   def generate_session_token!(extended_session: false)
     digest = User.generate_digest(SecureRandom.alphanumeric(40))
-    expiry = extended_session ? 7.days.from_now : 6.hours.from_now
+    expiry = extended_session ? 7.days.from_now : 24.hours.from_now
 
     update! session_token: digest, session_expiry: expiry
   rescue ActiveRecord::RecordInvalid
@@ -191,7 +191,7 @@ class User < ApplicationRecord
 
   # Checkes the expiration of a token.
   def self.activation_token_expired?(sent_at)
-    Time.current > (sent_at.in(ACTIVATION_TOKEN_VALIDITY_PERIOD))
+    Time.current > sent_at.in(ACTIVATION_TOKEN_VALIDITY_PERIOD)
   end
 
   def invalidate_activation_token
@@ -214,5 +214,18 @@ class User < ApplicationRecord
     return unless role
 
     errors.add(:user_provider, 'has to be the same as the Role provider') if provider != role.provider
+  end
+
+  private
+
+  def scan_avatar_for_virus
+    return if !virus_scan? || !attachment_changes['avatar']
+
+    path = attachment_changes['avatar']&.attachable&.tempfile&.path
+
+    return true if Clamby.safe?(path)
+
+    errors.add(:avatar, 'MalwareDetected')
+    throw :abort
   end
 end

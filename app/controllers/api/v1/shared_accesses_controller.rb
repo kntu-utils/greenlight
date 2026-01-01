@@ -38,8 +38,10 @@ module Api
       # Shares the room with all of the specified users
       def create
         shared_users_ids = Array(params[:shared_users])
+        # Only allow sharing with users of current tenant
+        filtered_ids = User.with_provider(current_provider).where(id: shared_users_ids).pluck(:id)
 
-        shared_users_ids.each do |shared_user_id|
+        filtered_ids.each do |shared_user_id|
           SharedAccess.create(user_id: shared_user_id, room_id: @room.id)
         end
 
@@ -73,9 +75,10 @@ module Api
 
         # Can't share the room if it's already shared or it's the room owner
         shareable_users = User.with_attached_avatar
+                              .with_provider(current_provider)
                               .where.not(id: [@room.shared_users.pluck(:id) << @room.user_id])
                               .where(role_id: [role_ids])
-                              .name_search(params[:search])
+                              .shared_access_search(params[:search])
         render_data data: shareable_users, serializer: SharedAccessSerializer, status: :ok
       end
 

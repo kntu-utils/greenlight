@@ -32,9 +32,7 @@ namespace :configuration do
 
     info 'Checking connection to Postgres Database:'
     begin
-      ActiveRecord::Base.establish_connection # Establishes connection
-      ActiveRecord::Base.connection # Calls connection object
-      failed('Unable to connect to Database') unless ActiveRecord::Base.connected?
+      ActiveRecord::Base.connection.verify!
     rescue StandardError => e
       failed("Unable to connect to Database - #{e}")
     end
@@ -42,7 +40,7 @@ namespace :configuration do
 
     info 'Checking connection to Redis Cache:'
     begin
-      Redis.new.ping
+      Redis.new(url: ENV.fetch('REDIS_URL')).ping
     rescue StandardError => e
       failed("Unable to connect to Redis - #{e}")
     end

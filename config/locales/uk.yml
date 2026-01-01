@@ -63,8 +63,15 @@ uk:
       invitation_to_join: Запрошення доєднатись до BigBlueButton
       you_have_been_invited: "Вас було запрошено створити обліковий запис в BigBlueButton користувачем %{name}"
       get_started: "Щоб зареєструватись, натисніть кнопку знизу та слідуйте подальшим крокам."
-      valid_invitation: Запрошення дійсне протягом 48 годин.
+      valid_invitation: Запрошення дійсне протягом 24 годин.
       sign_up: Реєстрація
+    new_user_signup:
+      new_user: Нова реєстрація користувача BigBlueButton
+      new_user_description: Новий користувач зареєструвався для використання BigBlueButton.
+      name: "Ім'я: %{name}"
+      email: "Електронна пошта: %{email}"
+      admin_panel: "Панель адміністратора"
+      take_action: "Для перегляду нового користувача та необхідних дій відвідайте панель адміністратора."
     reset:
       password_reset: Запит на новий пароль
       password_reset_requested: "Повідомлення на зміну паролю надіслане на пошту %{email}"
@@ -72,3 +79,5 @@ uk:
       reset_password: Скидування паролю
       link_expires: Посилання залишатиметься дійсним протягом 1 години.
       ignore_request: "Якщо ви не робили запит на зміну паролю, проігноруйте цей лист."
+  room:
+    new_room_name: "Кімната користувача %{username}"

@@ -36,9 +36,8 @@ export default function UpdateUserForm({ user }) {
   const { t } = useTranslation();
   const currentUser = useAuth();
 
-  // Remove the display of role input field if the user is a super admin trying to update their own role
-  const isSuperAdminEditOwnRole = user === currentUser && currentUser.isSuperAdmin;
-  const canUpdateRole = PermissionChecker.hasManageUsers(currentUser) && !isSuperAdminEditOwnRole;
+  // User with ManageUsers permission can update any user except themselves
+  const canUpdateRole = PermissionChecker.hasManageUsers(currentUser) && currentUser.id !== user.id;
 
   const { data: roles } = useRoles({ enabled: canUpdateRole });
   const { data: locales } = useLocales();
@@ -71,7 +70,7 @@ export default function UpdateUserForm({ user }) {
 
   return (
     <Form methods={methods} onSubmit={updateUserAPI.mutate}>
-      <FormControl field={fields.name} type="text" />
+      <FormControl field={fields.name} type="text" readOnly={user.external_account && !PermissionChecker.hasManageUsers(currentUser)} />
       <FormControl field={fields.email} type="email" readOnly />
       <FormSelect field={fields.language} variant="dropdown">
         {
@@ -86,7 +85,7 @@ export default function UpdateUserForm({ user }) {
         </FormSelect>
       )}
       <Stack direction="horizontal" gap={2} className="float-end">
-        <Button variant="neutral" onClick={reset}> { t('cancel') } </Button>
+        <Button variant="neutral" onClick={reset}> { t('reset') } </Button>
         <Button variant="brand" type="submit" disabled={updateUserAPI.isLoading}>
           { t('update') }
           {updateUserAPI.isLoading && <Spinner className="me-2" />}
@@ -103,6 +102,7 @@ UpdateUserForm.propTypes = {
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
+    external_account: PropTypes.bool.isRequired,
     role: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,

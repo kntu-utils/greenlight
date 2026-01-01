@@ -39,7 +39,7 @@ module Api
         # Creates an invitation for the specified emails (comma separated) and sends them an email
         def create
           params[:invitations][:emails].split(',').each do |email|
-            invitation = Invitation.find_or_initialize_by(email:, provider: current_provider).tap do |i|
+            invitation = Invitation.find_or_initialize_by(email: email.downcase, provider: current_provider).tap do |i|
               i.updated_at = Time.zone.now
               i.save!
             end
@@ -59,6 +59,15 @@ module Api
         rescue StandardError => e
           logger.error "Failed to send invitations to #{params[:invitations][:emails]} - #{e}"
           render_error status: :bad_request
+        end
+
+        def destroy
+          invitation = Invitation.find(params[:id])
+          if invitation.destroy
+            render_data status: :ok
+          else
+            render_error status: :not_found
+          end
         end
       end
     end

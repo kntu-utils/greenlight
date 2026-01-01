@@ -28,4 +28,13 @@ module ClientRoutable
   def reset_password_url(token)
     "#{root_url}reset_password/#{token}"
   end
+
+  # Generates a client side pending url.
+  def pending_path
+    "#{root_path}pending"
+  end
+
+  def admin_panel_url
+    "#{root_url}admin/users"
+  end
 end

@@ -13,13 +13,20 @@
 //
 // You should have received a copy of the GNU Lesser General Public License along
 // with Greenlight; if not, see <http://www.gnu.org/licenses/>.
+#user-recordings {
+  min-height: 699px;
+}
+
+#room-recordings {
+  min-height: 491px;
+}
 
 #user-recordings, #room-recordings {
   table {
     border-top-right-radius: $border-radius-lg;
     border-top-left-radius: $border-radius-lg;
     border-spacing: 0;
-    overflow: hidden;
+    border-top-width: 0 !important;
   }
 
   tr {
@@ -69,11 +76,15 @@
   }
 }
 
-.recordings-list {
+.recordings-list, .popover-body {
   .recording-icon-circle {
     min-width: 40px;
     min-height: 40px;
     background-color: var(--brand-color-light);
+  }
+
+  [class*="btn-format-"]:hover {
+    background-image: linear-gradient(rgb(0 0 0/5%) 0 0);
   }
 
   .btn-format-presentation {

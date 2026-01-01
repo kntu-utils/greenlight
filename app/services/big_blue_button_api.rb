@@ -44,12 +44,13 @@ class BigBlueButtonApi
     end
   end
 
-  def join_meeting(room:, role:, name: nil, avatar_url: nil)
+  def join_meeting(room:, role:, user_id:, name: nil, avatar_url: nil)
     bbb_server.join_meeting_url(
       room.meeting_id,
       name,
       '', # empty password -> use the role passed ing
       {
+        userID: user_id,
         role:,
         avatarURL: avatar_url,
         createTime: room.last_session&.to_datetime&.strftime('%Q'),
@@ -90,13 +91,19 @@ class BigBlueButtonApi
     bbb_server.publish_recordings(record_ids, publish)
   end
 
+  def update_recording_visibility(record_id:, visibility:)
+    new_visibility_params = visibility_params_of(visibility)
+    publish_recordings(record_ids: record_id, publish: new_visibility_params[:publish])
+    update_recordings(record_id:, meta_hash: new_visibility_params[:meta_hash])
+  end
+
   def update_recordings(record_id:, meta_hash:)
-    bbb_server.update_recordings(record_id, {}, meta_hash)
+    bbb_server.update_recordings(record_id, nil, meta_hash)
   end
 
   # Decodes the JWT using the BBB secret as key (Used in Recording Ready Callback)
   def decode_jwt(token)
-    JWT.decode token, Rails.configuration.bigbluebutton_secret, true, { algorithm: 'HS256' }
+    JWT.decode token, @secret, true, { algorithm: 'HS256' }
   end
 
   private
@@ -107,5 +114,17 @@ class BigBlueButtonApi
     else
       ProviderCredentials.new(provider: @provider).call
     end
+  end
+
+  def visibility_params_of(visibility)
+    params_of = {
+      Recording::VISIBILITIES[:unpublished] => { publish: false, meta_hash: { protect: false, 'meta_gl-listed': false } },
+      Recording::VISIBILITIES[:published] => { publish: true, meta_hash: { protect: false, 'meta_gl-listed': false } },
+      Recording::VISIBILITIES[:public] => { publish: true, meta_hash: { protect: false, 'meta_gl-listed': true } },
+      Recording::VISIBILITIES[:protected] => { publish: true, meta_hash: { protect: true, 'meta_gl-listed': false } },
+      Recording::VISIBILITIES[:public_protected] => { publish: true, meta_hash: { protect: true, 'meta_gl-listed': true } }
+    }
+
+    params_of[visibility.to_s]
   end
 end

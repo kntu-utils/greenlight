@@ -25,7 +25,7 @@ module Api
       # GET /api/v1/locales
       # Returns a cached list of locales available
       def index
-        language_with_name = Rails.cache.fetch('locales/list', expires_in: 24.hours) do
+        language_with_name = Rails.cache.fetch('v3/locales/list', expires_in: 24.hours) do
           language_hash = {}
 
           languages = Dir.entries(Rails.root.join('app/assets/locales')).select { |file_name| file_name.ends_with?('.json') }
@@ -48,11 +48,13 @@ module Api
       # Returns the requested language's locale strings (returns 406 if locale doesn't exist)
       def show
         language = params[:name].tr('-', '_')
+        language_file = Dir.entries('app/assets/locales').select { |f| f.starts_with?(language) }
+        final_language = language_file.min&.gsub('.json', '')
 
         # Serve locales files directly in development (not through asset pipeline)
-        return render file: Rails.root.join('app', 'assets', 'locales', "#{language}.json") if Rails.env.development?
+        return render file: Rails.root.join('app', 'assets', 'locales', "#{final_language}.json") if Rails.env.development?
 
-        redirect_to ActionController::Base.helpers.asset_path("#{language}.json")
+        redirect_to ActionController::Base.helpers.asset_path("#{final_language}.json")
       rescue StandardError
         head :not_acceptable
       end

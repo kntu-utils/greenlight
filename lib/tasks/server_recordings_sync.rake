@@ -18,15 +18,35 @@
 
 desc 'Server Recordings sync with BBB server'
 
-task server_recordings_sync: :environment do
-  Recording.destroy_all
+task :server_recordings_sync, %i[provider] => :environment do |_task, args|
+  args.with_defaults(provider: 'greenlight')
 
-  Room.select(:id, :meeting_id).in_batches(of: 25) do |rooms|
+  info 'Clearing saved formats and recordings'
+  Format.delete_all
+  Recording.delete_all
+
+  Room.includes(:user).select(:id, :meeting_id).with_provider(args[:provider]).in_batches(of: 25) do |rooms|
     meeting_ids = rooms.pluck(:meeting_id)
 
-    recordings = BigBlueButtonApi.new(provider: 'greenlight').get_recordings(meeting_ids:)
+    recordings = BigBlueButtonApi.new(provider: args[:provider]).get_recordings(meeting_ids:)
+
+    rooms.update_all(recordings_processing: 0) # rubocop:disable Rails/SkipsModelValidations
+
+    next if recordings[:recordings].blank?
+
+    # Skip the entire batch if the first and last recordings exist
+    if Recording.exists?(record_id: recordings[:recordings][0][:recordID]) && Recording.exists?(record_id: recordings[:recordings][-1][:recordID])
+      next
+    end
+
     recordings[:recordings].each do |recording|
+      next if Recording.exists?(record_id: recording[:recordID])
+
       RecordingCreator.new(recording:).call
+      success 'Successfully migrated Recording:'
+      info "RecordID: #{recording[:recordID]}"
+    rescue StandardError => e
+      err "Unable to migrate Recording:\nRecordID: #{recording[:recordID]}\nError: #{e}"
     end
   end
 end

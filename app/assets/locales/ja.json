@@ -14,20 +14,25 @@
   "report": "報告",
   "share": "共有",
   "cancel": "キャンセル",
+  "reset":   "リセット",
   "close": "閉じる",
   "delete": "削除",
   "copy": "参加リンクをコピー",
+  "copy_viewer_code": "視聴者用コードをコピーする",
+  "copy_moderator_code": "司会者用コードをコピーする",
   "or": "もしくは",
   "online": "オンライン",
   "help_center": "ヘルプセンター",
   "are_you_sure": "本当によろしいですか？",
   "return_home": "ホームに戻る",
   "created_at": "作成時",
+  "view_recordings": "録画を視聴",
+  "join_session": "会議に参加",
   "no_result_search_input": "\"{{ searchInput }}\"は見つかりませんでした",
   "action_permanent": "この操作は取り消すことができません",
   "homepage": {
     "welcome_bbb": "BigBlueButton へようこそ",
-    "bigbluebutton_description": "BigBlueButtonは、オンライン授業に最適化された、オープンソースのウェブ会議システムです。生徒や学生が協働し、すぐにフィードバックが得られるようにすることで、より多くの時間を実践的な学びに割くことができます。",
+    "bigbluebutton_description": "BigBlueButtonは、オンライン授業に最適化された、オープンソースのウェブ会議システムです。生徒や学生が協働し、すぐにフィードバックが得られるようにすることで、より多くの時間を実践的な学びにあてることができます。",
     "greenlight_description": "自分の会議室を作成し、会議を開いてみてください。簡単なリンクを使って手軽に他人を招待することもできます。",
     "learn_more": "BigBlueButtonについてもっと知る",
     "explore_features": "基本的な機能",
@@ -79,6 +84,7 @@
       "account_info": "アカウント情報",
       "delete_account": "アカウント削除",
       "change_password": "パスワード変更",
+      "set_password": "新しいパスワードを入力",
       "reset_password": "パスワード再設定",
       "update_account_info": "アカウント情報の更新",
       "current_password": "現在のパスワード",
@@ -109,7 +115,7 @@
     "create_new_room": "新しい会議室を作成する",
     "enter_room_name": "会議室名を入力してください",
     "shared_by": "共有者",
-    "last_session": "最後のセッション: {{ localizedTime }}",
+    "last_session": "最後の会議: {{ localizedTime }}",
     "no_last_session": "会議はまだ開かれていません",
     "search_not_found": "会議室が見つかりません",
     "rooms_list_is_empty": "まだ会議室はありません！",
@@ -126,7 +132,8 @@
       "presentation": "プレゼンファイル",
       "click_to_upload": "クリックしてアップロード",
       "drag_and_drop": "またはドラッグ＆ドロップ",
-      "upload_description": "OfficeドキュメントかPDFファイルをアップロードしてください。ファイルの大きさによっては、使用可能になるまでに少し時間がかかるかもしれません。",
+      "upload_description": "OfficeドキュメントかPDFファイル（サイズ{{size}}以下）をアップロードしてください。ファイルの大きさによっては、使用可能になるまでに少し時間がかかるかもしれません。",
+      "delete_presentation": "プレゼンファイルを削除",
       "are_you_sure_delete_presentation": "本当にこのプレゼンファイルを削除しますか？"
     },
     "shared_access": {
@@ -157,25 +164,34 @@
       "wrong_access_code": "誤った接続コード",
       "generate_viewers_access_code": "視聴者用接続コードを作成する",
       "generate_mods_access_code": "司会者用接続コードを作成する",
+      "server_tag": "この会議室のサーバタイプを選択",
+      "default_tag_name": "通常",
+      "server_tag_desired": "最適",
+      "server_tag_required": "最小",
       "are_you_sure_delete_room": "本当にこの会議室を削除しますか？"
     }
   },
   "recording": {
     "recording": "録画",
     "recordings": "録画",
+    "processing": "録画を処理しています...",
     "name": "名前",
     "length": "長さ",
     "users": "参加者",
     "visibility": "公開度",
     "formats": "フォーマット",
-    "published": "公開",
-    "unpublished": "非公開",
-    "protected": "秘匿",
+    "published": "限定公開",
+    "unpublished": "閲覧不可",
+    "protected": "保護",
+    "public": "公開",
+    "public_protected": "公開 / 保護",
     "length_in_minutes": "{{recording.length}}分",
     "processing_recording": "録画を処理中。数分かかることがあります...",
     "copy_recording_urls": "録画のURLをコピー",
     "recordings_list_empty": "まだ録画がありません！",
-    "recordings_list_empty_description": "会議を開始し録画すれば、録画データが現れます。",
+    "public_recordings_list_empty": "公開された録画はまだありません！",
+    "recordings_list_empty_description": "会議を開始し、それを録画すると、ここに録画データが表示されます。",
+    "public_recordings_list_empty_description": "視聴が許可されると、ここに録画データが表示されます。",
     "delete_recording": "この録画を削除",
     "are_you_sure_delete_recording": "本当にこの録画を削除しますか？",
     "search_not_found": "録画が見つかりません"
@@ -191,6 +207,8 @@
       "banned": "ロック",
       "ban": "ロックする",
       "unban": "ロックを解除する",
+      "unverified": "未承認",
+      "verify": "承認",
       "deleted": "削除",
       "invited_tab": "招待",
       "invite_user": "ユーザーを招待",
@@ -214,11 +232,14 @@
       "empty_pending_users_subtext": "ユーザーの状態が「保留」に変わると、こちらに表示されます。",
       "empty_banned_users": "このサーバーには、ロックされているユーザーはまだいません！",
       "empty_banned_users_subtext": "ユーザーの状態がロックに変わると、こちらに表示されます。",
+      "empty_unverified_users": "このサーバーには、未承認のユーザーはまだ一人もいません！",
+      "empty_unverified_users_subtext": "未承認のユーザーがいる場合はここに表示されます。",
       "empty_invited_users": "このサーバーには、招待されているユーザーはまだいません！",
       "empty_invited_users_subtext": "ユーザーの状態が招待中に変わると、こちらに表示されます。",
       "invited": {
         "time_sent": "送付日時",
-        "valid": "有効"
+        "valid": "有効",
+        "revoke": "取り消す"
       }
     },
     "server_rooms": {
@@ -231,8 +252,8 @@
       "running": "会議中",
       "not_running": "使われていません",
       "active": "アクティブ",
-      "current_session": "現在のセッション: {{lastSession}}",
-      "last_session": "最後のセッション: {{localizedTime}}",
+      "current_session": "現在の会議: {{lastSession}}",
+      "last_session": "最後の会議: {{localizedTime}}",
       "no_meeting_yet": "会議は一度も行われていません。",
       "delete_server_rooms": "全ての会議室を削除",
       "resync_recordings": "録画の再同期",
@@ -255,17 +276,23 @@
         "brand_image": "ブランド画像",
         "click_to_upload": "クリックしてアップロード",
         "drag_and_drop": "あるいはドラッグ＆ドロップ",
-        "upload_brand_image_description": "PNG、JPG、またはSVGファイルをアップロードしてください。ファイルの大きさによっては、使用可能になるまでに少し時間がかかるかもしれません。",
+        "upload_brand_image_description": "PNG、JPG、SVGファイル（サイズ{{size}}以下）をアップロードしてください。ファイルの大きさによっては、使用可能になるまでに少し時間がかかるかもしれません。",
         "remove_branding_image": "ブランド画像の削除"
       },
       "administration": {
         "administration": "法的根拠",
         "terms": "利用規約",
-        "privacy": "プライバシーポリシー",
-        "privacy_policy": "プライバシーポリシー",
+        "privacy": "プライバシーに関する告知",
+        "privacy_policy": "プライバシーに関する告知",
         "change_term_links": "ページ下方の利用規約へのリンクを変更する",
         "change_privacy_link": "ページ下方のプライバシーポリシーへのリンクを変更する",
+        "helpcenter": "ヘルプセンター",
+        "change_helpcenter_link": "プロフィールのドロップダウンメニュー内に表示されるヘルプセンターのリンクを変更",
+        "maintenance": "メンテナンスバナー",
+        "change_maintenance_text": "ヘッダーに表示されるメンテナンスバナーの文章を変更する",
         "change_url": "URL変更",
+        "set_text": "文章を設定",
+        "clear_banner": "バナーを消去",
         "enter_link": "リンクをここに入力"
       },
       "settings": {
@@ -273,24 +300,35 @@
         "allow_users_to_share_rooms": "ユーザーに会議室の共有を許可",
         "allow_users_to_share_rooms_description": "無効に設定した場合、各会議室のドロップダウンからボタンが削除され、ユーザーが会議室を共有できなくなります",
         "allow_users_to_preupload_presentation": "ユーザーにプレゼンファイルの事前アップロードを許可",
-        "allow_users_to_preupload_presentation_description": "ユーザーがプレゼンファイルを事前にアップロードし、この会議室専用の標準プレゼンとして使用できるようになります"
+        "allow_users_to_preupload_presentation_description": "ユーザーがプレゼンファイルを事前にアップロードし、この会議室専用の標準プレゼンとして使用できるようになります",
+        "show_sign_in_on_room_join": "入室時にサインインリンクを表示する",
+        "show_sign_in_on_room_join_description": "もしユーザーがサインインしていない場合、入室時にウィンドウ下部にサインインのためのリンクが現れます",
+        "default_visibility": "デフォルトの録画公開度",
+        "default_visibility_description": "新しい録画は、まずは全てこの公開度となります。",
+        "session_timeout": "セッションの継続時間",
+        "session_timeout_description": "セッションの継続時間は、通常のクッキー設定では１日ですが、７日間の延長設定とすることもできます",
+        "default_session_timeout": "通常（１日）",
+        "extended_session_timeout": "延長（７日間）"
       },
       "registration": {
         "registration": "ユーザー登録",
         "role_mapping_by_email": "メールアドレスによる役割の割り当て",
-        "role_mapping_by_email_description": "メールアドレスを使ってユーザーに役割を割り当てます。役割1=メール1, 役割2=メール2、の形式にしてください。",
+        "role_mapping_by_email_description": "メールアドレスによって、割り当てられる役割を固定します。役割1=メール1, 役割2=メール2、の形式にしてください。",
         "enter_role_mapping_rule": "役割割り当てルールを入力",
         "resync_on_login": "サインインごとにユーザーのデーターを再同期",
         "resync_on_login_description": "サインインのたびにユーザーの情報を再同期し、外部の承認提供者の情報とGreenlightの情報とを常に一致させます",
         "default_role": "標準の役割",
-        "default_role_description": "新しく作成されたユーザーに自動的に割り当てられる役割です",
+        "default_role_description": "新しく作成されたユーザーにはこの役割が自動的に割り当てられます",
         "registration_method": "登録方法",
         "registration_method_description": "ユーザーがこのサイトに登録する方法を変更します",
         "registration_methods" : {
           "open": "誰でも自由に登録",
           "invite": "招待制",
           "approval": "承認制"
-        }
+        },
+        "allowed_domains": "許可するEmailのドメイン",
+        "allowed_domains_signup_description": "特定のEmailドメインのみからのサインアップを許可します。@test.com や domain.com のような形式で記入してください。",
+        "enter_allowed_domains_rule" : "許可するドメインを入力"
       }
     },
     "room_configuration": {
@@ -341,7 +379,9 @@
         "manage_site_settings": "この役割のユーザーに、サイト全体の設定を許可する",
         "manage_roles": "この役割のユーザーに、他の役割の内容を変更することを許可する",
         "shared_list": "この役割のユーザーを、会議室を共有できるユーザーのリストに含める",
-        "room_limit": "作成できる会議室数の制限"
+        "room_limit": "作成できる会議室数の制限",
+        "email_on_signup": "新しいユーザーが登録したときメールを受け取る",
+        "allowed_recording_visibility": "許可する公開度"
       }
     }
   },
@@ -352,6 +392,7 @@
         "user_updated": "ユーザーが更新されました。",
         "user_deleted": "ユーザーが削除されました。",
         "avatar_updated": "アバターが更新されました。",
+        "password_changed": "パスワードが更新されました。もう一度サインインしてください。",
         "password_updated": "パスワードが更新されました。",
         "account_activated": "アカウントが有効化されました。サインインしてみてください。",
         "activation_email_sent": "アクチベーションメールが送信されました",
@@ -376,15 +417,20 @@
         "access_code_copied": "接続コードがコピーされました。",
         "access_code_generated": "接続コードが作成されました。",
         "access_code_deleted": "アクセスコードが消去されました。",
-        "copied_meeting_url": "会議のURLがコピーされました。このリンクを使用すると会議に参加できます。"
+        "copied_meeting_url": "会議のURLがコピーされました。このリンクを使用すると会議に参加できます。",
+        "copied_viewer_code": "視聴者用のアクセスコードがコピーされました。",
+        "copied_moderator_code": "司会者用のアクセスコードがコピーされました。"
       },
       "site_settings": {
         "site_setting_updated": "サイトの設定が更新されました。",
         "brand_color_updated": "サイトの基調色がアップデートされました。",
         "brand_image_updated": "ブランド画像がアップデートされました。",
         "brand_image_deleted": "ブランド画像が消去されました。",
-        "privacy_policy_updated": "プライバシーポリシーがアップデートされました。",
-        "terms_of_service_updated": "利用規約がアップデートされました。"
+        "privacy_policy_updated": "プライバシーに関する告知がアップデートされました。",
+        "helpcenter_updated": "ヘルプセンターのリンクが更新されました。",
+        "terms_of_service_updated": "利用規約が更新されました。",
+        "maintenance_updated": "メンテナンスバナーが更新されました。",
+        "allowed_domains_signup_updated": "許可するEmailのドメインが更新されました。"
       },
       "recording": {
         "recording_visibility_updated": "録画の公開度が更新されました。",
@@ -399,15 +445,18 @@
         "role_permission_updated": "この役割の権限が更新されました。"
       },
       "invitations": {
-        "invitation_sent": "招待状が送付されました"
+        "invitation_sent": "招待状が送付されました",
+        "invitation_revoked": "招待状を取り消しました"
       }
     },
     "error": {
       "problem_completing_action": "操作をうまく完了できませんでした。\nもう一度やってみてください。",
+      "server_type_unavailable": "希望されたサーバタイプは利用できません。別のタイプを部屋の設定から選んでください。",
       "file_type_not_supported": "ファイルの形式がサポートされていません。",
       "file_size_too_large": "ファイルが大きすぎます。",
       "file_upload_error": "ファイルがアップロードできません。",
       "signin_required": "このページに接続するにはサインインが必要です",
+      "malware_detected": "マルウェアが検出されました！アップロードしたファイルにはマルウェアが含まれている可能性があります。ファイルを確認して、もう一度試してください。",
       "roles": {
         "role_assigned": "この役割はすでにユーザーに割り当てられているため、削除できません。"
       },
@@ -492,8 +541,18 @@
           "min": "名前は２文字以上必要です"
         }
       },
+      "room_join": {
+        "name": {
+          "required": "名前を入力してください。"
+        }
+      },
       "url": {
         "invalid": "無効なURL"
+      },
+      "text_form": {
+        "value": {
+          "required": "何かメッセージを入力してください"
+        }
       }
     },
     "room": {
@@ -501,6 +560,21 @@
         "name": {
           "label": "会議室名",
           "placeholder": "会議室名を入力..."
+        }
+      }
+    },
+    "room_join": {
+      "fields": {
+        "name": {
+            "label": "名前",
+            "placeholder": "名前を入力してください"
+        },
+        "access_code": {
+          "label": "アクセスコード",
+          "placeholder": "アクセスコードを入力してください"
+        },
+        "recording_consent": {
+          "label": "私はこの会議が録画される可能性があること、また自分の音声とビデオもそれに含まれうることを理解しています。"
         }
       }
     },
@@ -634,7 +708,8 @@
       "site_settings": {
         "fields": {
           "value": {
-            "placeholder": "ここにリンクを入力..."
+            "placeholder": "ここにリンクを入力...",
+            "text_placeholder": "文章をここに入力..."
           }
         }
       },

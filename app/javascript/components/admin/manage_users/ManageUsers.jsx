@@ -33,20 +33,23 @@ import InvitedUsersTable from './InvitedUsersTable';
 import PendingUsers from './PendingUsers';
 import BannedUsers from './BannedUsers';
 import { useAuth } from '../../../contexts/auth/AuthProvider';
+import useEnv from '../../../hooks/queries/env/useEnv';
+import UnverifiedUsers from './UnverifiedUsers';
 
 export default function ManageUsers() {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState();
   const { data: registrationMethod } = useSiteSetting('RegistrationMethod');
   const currentUser = useAuth();
+  const envAPI = useEnv();
 
   if (currentUser.permissions?.ManageUsers !== 'true') {
     return <Navigate to="/404" />;
   }
 
   return (
-    <div id="admin-panel" className="pb-3">
-      <h3 className="py-5">{ t('admin.admin_panel') }</h3>
+    <div id="admin-panel" className="pb-4">
+      <h3 className="py-5">{t('admin.admin_panel')}</h3>
       <Card className="border-0 card-shadow">
         <Tab.Container activeKey="users">
           <Row>
@@ -59,32 +62,37 @@ export default function ManageUsers() {
               <Tab.Content className="p-0">
                 <Container className="admin-table p-0">
                   <div className="p-4 border-bottom">
-                    <h3>{ t('admin.manage_users.manage_users') }</h3>
+                    <h3>{t('admin.manage_users.manage_users')}</h3>
                   </div>
                   <div className="p-4">
                     <Stack direction="horizontal" className="mb-4">
                       <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
                       <div className="ms-auto">
-                        { registrationMethod === 'invite'
+                        {registrationMethod === 'invite'
                           && (
-                          <Modal
-                            modalButton={(
-                              <Button variant="brand-outline" className="me-3">
-                                <EnvelopeIcon className="hi-s me-1" />{ t('admin.manage_users.invite_user') }
-                              </Button>
-                            )}
-                            title={t('admin.manage_users.invite_user')}
-                            body={<InviteUserForm />}
-                            size="md"
-                          />
+                            <Modal
+                              modalButton={(
+                                <Button variant="brand-outline" className="me-3">
+                                  <EnvelopeIcon className="hi-s me-1" />{t('admin.manage_users.invite_user')}
+                                </Button>
+                              )}
+                              title={t('admin.manage_users.invite_user')}
+                              body={<InviteUserForm />}
+                              size="md"
+                            />
                           )}
-                        <Modal
-                          modalButton={
-                            <Button variant="brand"><UserPlusIcon className="hi-s me-1" /> { t('admin.manage_users.add_new_user') }</Button>
-                          }
-                          title={t('admin.manage_users.create_new_user')}
-                          body={<UserSignupForm />}
-                        />
+                        {
+                          (!envAPI.isLoading && !envAPI.data?.EXTERNAL_AUTH)
+                          && (
+                            <Modal
+                              modalButton={
+                                <Button variant="brand"><UserPlusIcon className="hi-s me-1" /> {t('admin.manage_users.add_new_user')}</Button>
+                              }
+                              title={t('admin.manage_users.create_new_user')}
+                              body={<UserSignupForm />}
+                            />
+                          )
+                        }
 
                       </div>
                     </Stack>
@@ -92,7 +100,13 @@ export default function ManageUsers() {
                       <Tab eventKey="active" title={t('admin.manage_users.active')}>
                         <VerifiedUsers searchInput={searchInput} />
                       </Tab>
-                      { registrationMethod === 'approval'
+                      {(!envAPI.isLoading && !envAPI.data?.EXTERNAL_AUTH)
+                      && (
+                        <Tab eventKey="unverified" title={t('admin.manage_users.unverified')}>
+                          <UnverifiedUsers searchInput={searchInput} />
+                        </Tab>
+                      )}
+                      {registrationMethod === 'approval'
                         && (
                           <Tab eventKey="pending" title={t('admin.manage_users.pending')}>
                             <PendingUsers searchInput={searchInput} />
@@ -101,11 +115,11 @@ export default function ManageUsers() {
                       <Tab eventKey="banned" title={t('admin.manage_users.banned')}>
                         <BannedUsers searchInput={searchInput} />
                       </Tab>
-                      { registrationMethod === 'invite'
+                      {registrationMethod === 'invite'
                         && (
-                        <Tab eventKey="invited" title={t('admin.manage_users.invited_tab')}>
-                          <InvitedUsersTable input={searchInput} />
-                        </Tab>
+                          <Tab eventKey="invited" title={t('admin.manage_users.invited_tab')}>
+                            <InvitedUsersTable input={searchInput} />
+                          </Tab>
                         )}
                     </Tabs>
                   </div>

@@ -28,6 +28,10 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
   end
 
   describe '#create' do
+    before do
+      allow(controller).to receive(:external_auth?).and_return(false)
+    end
+
     it 'creates a regular session if the remember me checkbox is not selected' do
       post :create, params: {
         session: {
@@ -54,46 +58,6 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       expect(session[:session_token]).to eq(user.session_token)
     end
 
-    it 'returns UnverifiedUser error if the user is not verified' do
-      unverified_user = create(:user, password: 'Password1!', verified: false)
-
-      post :create, params: {
-        session: {
-          email: unverified_user.email,
-          password: 'Password1!'
-        }
-      }
-
-      expect(JSON.parse(response.body)['data']).to eq(unverified_user.id)
-      expect(JSON.parse(response.body)['errors']).to eq('UnverifiedUser')
-    end
-
-    it 'returns BannedUser error if the user is banned' do
-      banned_user = create(:user, password: 'Password1!', status: :banned)
-
-      post :create, params: {
-        session: {
-          email: banned_user.email,
-          password: 'Password1!'
-        }
-      }
-
-      expect(JSON.parse(response.body)['errors']).to eq('BannedUser')
-    end
-
-    it 'returns Pending error if the user is banned' do
-      banned_user = create(:user, password: 'Password1!', status: :pending)
-
-      post :create, params: {
-        session: {
-          email: banned_user.email,
-          password: 'Password1!'
-        }
-      }
-
-      expect(JSON.parse(response.body)['errors']).to eq('PendingUser')
-    end
-
     it 'logs in with greenlight account before bn account' do
       post :create, params: { session: { email: user.email, password: 'Password1!' } }
       expect(response).to have_http_status(:ok)
@@ -107,16 +71,138 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       expect(response).to have_http_status(:ok)
       expect(session[:session_token]).to eq(super_admin.reload.session_token)
     end
+
+    context 'errors' do
+      it 'returns unauthorized if the user is already signed in' do
+        sign_in_user(user)
+
+        post :create, params: {
+          session: {
+            email: 'email@email.com',
+            password: 'Password1!',
+            extend_session: false
+          }
+        }, as: :json
+
+        expect(response).to be_unauthorized
+      end
+
+      it 'returns forbidden if the external auth is enabled' do
+        allow(controller).to receive(:external_auth?).and_return(true)
+
+        post :create, params: {
+          session: {
+            email: 'email@email.com',
+            password: 'Password1!',
+            extend_session: false
+          }
+        }, as: :json
+
+        expect(response).to be_forbidden
+      end
+
+      it 'returns UnverifiedUser error if the user is not verified' do
+        unverified_user = create(:user, password: 'Password1!', verified: false)
+
+        post :create, params: {
+          session: {
+            email: unverified_user.email,
+            password: 'Password1!'
+          }
+        }
+
+        expect(response.parsed_body['data']).to eq(unverified_user.id)
+        expect(response.parsed_body['errors']).to eq('UnverifiedUser')
+      end
+
+      it 'returns BannedUser error if the user is banned' do
+        banned_user = create(:user, password: 'Password1!', status: :banned)
+
+        post :create, params: {
+          session: {
+            email: banned_user.email,
+            password: 'Password1!'
+          }
+        }
+
+        expect(response.parsed_body['errors']).to eq('BannedUser')
+      end
+
+      it 'returns Pending error if the user is banned' do
+        banned_user = create(:user, password: 'Password1!', status: :pending)
+
+        post :create, params: {
+          session: {
+            email: banned_user.email,
+            password: 'Password1!'
+          }
+        }
+
+        expect(response.parsed_body['errors']).to eq('PendingUser')
+      end
+    end
   end
 
   describe '#destroy' do
-    it 'signs off the user' do
+    before do
       sign_in_user(user)
+    end
 
+    it 'signs off the user' do
       delete :destroy
 
       expect(cookies.encrypted[:_extended_session]).to be_nil
       expect(session[:session_token]).to be_nil
+    end
+
+    context 'external auth' do
+      before do
+        session[:oidc_id_token] = 'sample_id_token'
+        allow(controller).to receive(:external_auth?).and_return(true)
+        ENV['OPENID_CONNECT_ISSUER'] = 'https://openid.example'
+        ENV['OPENID_CONNECT_LOGOUT_PATH'] = '/protocol/openid-connect/logout'
+      end
+
+      after do
+        ENV['OPENID_CONNECT_ISSUER'] = nil
+        ENV['OPENID_CONNECT_LOGOUT_PATH'] = nil
+      end
+
+      it 'returns the OIDC logout url' do
+        delete :destroy
+
+        expect(response.parsed_body['data']).to match('protocol/openid-connect/logout')
+        expect(response.parsed_body['data']).to match('id_token_hint=sample_id_token')
+        expect(response.parsed_body['data']).to match("post_logout_redirect_uri=#{CGI.escape(root_url(success: 'LogoutSuccessful'))}")
+      end
+
+      it 'removes both session tokens' do
+        delete :destroy
+
+        expect(session[:session_token]).to be_nil
+        expect(session[:oidc_id_token]).to be_nil
+      end
+
+      context 'LB is set' do
+        let!(:role_with_provider_test) { create(:role, provider: 'test-provider') }
+        let!(:mt_user) { create(:user, provider: 'test-provider', role: role_with_provider_test) }
+
+        before do
+          sign_in_user(mt_user)
+          ENV['LOADBALANCER_ENDPOINT'] = 'http://test.com/'
+          allow(controller).to receive(:current_provider).and_return('test-provider')
+        end
+
+        after do
+          ENV['LOADBALANCER_ENDPOINT'] = nil
+        end
+
+        it 'returns the OIDC logout url' do
+          delete :destroy
+
+          expect(response.parsed_body['data']).to start_with(File.join(ENV.fetch('OPENID_CONNECT_ISSUER', nil), "/#{controller.current_provider}"))
+        end
+      end
     end
   end
 end

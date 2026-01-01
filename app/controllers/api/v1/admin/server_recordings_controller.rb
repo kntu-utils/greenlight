@@ -24,18 +24,18 @@ module Api
           ensure_authorized('ManageRecordings')
         end
 
-        # POST /api/v1/admin/server_recordings.json
+        # GET /api/v1/admin/server_recordings.json
         # Fetches and returns the list of all server recordings
         def index
           sort_config = config_sorting(allowed_columns: %w[name length visibility])
 
           recordings = Recording.includes(:user)
                                 .with_provider(current_provider)
-                                .order(sort_config)
-                                &.search(params[:search])
+                                .order(sort_config, recorded_at: :desc)
+                                &.server_search(params[:search])
           pagy, recordings = pagy(recordings)
 
-          render_data data: recordings, meta: pagy_metadata(pagy), status: :ok
+          render_data data: recordings, serializer: ServerRecordingSerializer, meta: pagy_metadata(pagy), status: :ok
         end
       end
     end

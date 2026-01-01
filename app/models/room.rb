@@ -31,13 +31,15 @@ class Room < ApplicationRecord
   validates :friendly_id, presence: true, uniqueness: true
   validates :meeting_id, presence: true, uniqueness: true
   validates :presentation,
-            content_type: %i[.doc .docx .ppt .pptx .pdf .xls .xlsx .txt .rtf .odt .ods .odp .odg .odc .odi .jpg .jpeg .png],
-            size: { less_than: 30.megabytes }
+            content_type: Rails.configuration.uploads[:presentations][:formats],
+            size: { less_than: Rails.configuration.uploads[:presentations][:max_size] }
 
-  validates :name, length: { minimum: 2, maximum: 255 }
+  validates :name, length: { minimum: 1, maximum: 255 }
   validates :recordings_processing, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   before_validation :set_friendly_id, :set_meeting_id, on: :create
+  before_save :scan_presentation_for_virus
+
   after_create :create_meeting_options
 
   attr_accessor :shared, :active, :participants, :settings
@@ -65,7 +67,7 @@ class Room < ApplicationRecord
   def create_meeting_options
     configs = RoomsConfiguration.joins(:meeting_option).where(provider: user.provider).pluck(:name, :value).to_h
 
-    MeetingOption.all.find_each do |option|
+    MeetingOption.find_each do |option|
       value = if %w[true default_enabled].include? configs[option.name]
                 option.true_value
               else
@@ -73,6 +75,10 @@ class Room < ApplicationRecord
               end
       RoomMeetingOption.create(room: self, meeting_option: option, value:)
     end
+  end
+
+  def public_recordings
+    recordings.where(visibility: [Recording::VISIBILITIES[:public], Recording::VISIBILITIES[:public_protected]])
   end
 
   private
@@ -94,5 +100,16 @@ class Room < ApplicationRecord
     self.meeting_id = id
   rescue StandardError
     retry
+  end
+
+  def scan_presentation_for_virus
+    return if !virus_scan? || !attachment_changes['presentation']
+
+    path = attachment_changes['presentation']&.attachable&.tempfile&.path
+
+    return true if Clamby.safe?(path)
+
+    errors.add(:presentation, 'MalwareDetected')
+    throw :abort
   end
 end

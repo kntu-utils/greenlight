@@ -15,9 +15,7 @@
 // with Greenlight; if not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
-import {
-  Navigate, Outlet, useLocation, useMatch,
-} from 'react-router-dom';
+import { Navigate, Outlet, useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/auth/AuthProvider';
@@ -26,8 +24,8 @@ import useDeleteSession from '../hooks/mutations/sessions/useDeleteSession';
 export default function AuthenticatedOnly() {
   const { t } = useTranslation();
   const currentUser = useAuth();
-  const location = useLocation();
-  const match = useMatch('/rooms/:friendlyId');
+  const roomsMatch = useMatch('/rooms/:friendlyId');
+  const superAdminMatch = useMatch('/admin/*');
   const deleteSession = useDeleteSession({ showToast: false });
 
   // User is either pending or banned
@@ -44,8 +42,12 @@ export default function AuthenticatedOnly() {
   }
 
   // Custom logic to redirect from Rooms page to join page if the user isn't signed in
-  if (!currentUser.signed_in && match) {
-    return <Navigate to={`${location.pathname}/join`} />;
+  if (!currentUser.signed_in && roomsMatch) {
+    return <Navigate to={`${roomsMatch.pathnameBase}/join`} />;
+  }
+
+  if (currentUser.signed_in && currentUser.isSuperAdmin && !superAdminMatch) {
+    return <Navigate to="/admin/users" />;
   }
 
   if (!currentUser.signed_in) {

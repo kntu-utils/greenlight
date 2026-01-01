@@ -16,10 +16,10 @@
 
 import React from 'react';
 import {
-  Stack, Button, Col, Row, ButtonGroup,
+  Stack, Button, Col, Row, ButtonGroup, Dropdown,
 } from 'react-bootstrap';
 import {
-  Link, Navigate, useLocation, useParams,
+  Link, useParams, Navigate, useLocation,
 } from 'react-router-dom';
 import { HomeIcon, Square2StackIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -33,22 +33,38 @@ import useStartMeeting from '../../../hooks/mutations/rooms/useStartMeeting';
 import MeetingBadges from '../MeetingBadges';
 import SharedBadge from './SharedBadge';
 import RoomNamePlaceHolder from './RoomNamePlaceHolder';
+import Title from '../../shared_components/utilities/Title';
+import useRoomSettings from '../../../hooks/queries/rooms/useRoomSettings';
 
 export default function Room() {
   const { t } = useTranslation();
   const { friendlyId } = useParams();
   const {
-    isLoading: isRoomLoading, isError, data: room, error,
+    isLoading: isRoomLoading, data: room, isError, error,
   } = useRoom(friendlyId);
   const startMeeting = useStartMeeting(friendlyId);
   const currentUser = useAuth();
   const location = useLocation();
   const localizedTime = localizeDayDateTimeString(room?.last_session, currentUser?.language);
+  const roomSettings = useRoomSettings(friendlyId);
 
-  function copy(text, title=null) {
+  function copy(text, title = null) {
     navigator.clipboard.writeText(text);
     if (title) {
-      toast.success(t('toast.copy.success', {title}));
+      toast.success(t('toast.copy.success', { title }));
+    }
+  }
+
+  function copyInvite(role) {
+    if (role === 'viewer') {
+      navigator.clipboard.writeText(roomSettings?.data?.glViewerAccessCode);
+      toast.success(t('toast.success.room.copied_viewer_code'));
+    } else if (role === 'moderator') {
+      navigator.clipboard.writeText(roomSettings?.data?.glModeratorAccessCode);
+      toast.success(t('toast.success.room.copied_moderator_code'));
+    } else {
+      navigator.clipboard.writeText(`${window.location}/join`);
+      toast.success(t('toast.success.room.copied_meeting_url'));
     }
   }
 
@@ -59,6 +75,7 @@ export default function Room() {
 
   return (
     <>
+      <Title>{room?.name}</Title>
       <div className="wide-white">
         <Row className="pt-4">
           <Col>
@@ -68,7 +85,7 @@ export default function Room() {
           </Col>
         </Row>
         <Row className="py-5">
-          <Col className="col-xxl-8">
+          <Col className="col-4">
             {
                 isRoomLoading
                   ? (
@@ -101,6 +118,7 @@ export default function Room() {
                 t('room.meeting.start_meeting')
               )}
             </Button>
+
             <ButtonGroup className="float-end mx-2">
               <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join`, t('room.copy_fa'))}>
                 { t('room.copy_fa') }
@@ -108,11 +126,34 @@ export default function Room() {
               <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join?lng=en`, t('room.copy_en'))}>
                 { t('room.copy_en') }
               </Button>
-              {room?.settings?.glViewerAccessCode &&
-                  <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(room.settings.glViewerAccessCode)}>
-                    {t('room.copy_code')}
-                  </Button>}
             </ButtonGroup>
+
+            <Dropdown className="btn-group mt-1 mx-2 float-end pb-5">
+              <Button variant="brand-outline" type="button" className="btn dropdown-main" onClick={() => copyInvite()}>
+                <Square2StackIcon className="hi-s me-1" />
+                { t('copy') }
+              </Button>
+              { (roomSettings?.data?.glModeratorAccessCode || roomSettings?.data?.glViewerAccessCode) && (
+                <Dropdown.Toggle
+                  variant="brand-outline"
+                  className="btn dropdown-toggle dropdown-toggle-split"
+                  id="dropdown-toggle"
+                />
+              )}
+
+              <Dropdown.Menu className="dropdown-menu">
+                { roomSettings?.data?.glModeratorAccessCode && (
+                  <Dropdown.Item onClick={() => copyInvite('moderator')}>
+                    { t('copy_moderator_code') }
+                  </Dropdown.Item>
+                )}
+                { roomSettings?.data?.glViewerAccessCode && (
+                  <Dropdown.Item onClick={() => copyInvite('viewer')}>
+                    { t('copy_viewer_code') }
+                  </Dropdown.Item>
+                )}
+              </Dropdown.Menu>
+            </Dropdown>
           </Col>
         </Row>
       </div>

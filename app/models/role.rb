@@ -21,7 +21,8 @@ class Role < ApplicationRecord
   has_many :role_permissions, dependent: :destroy
   has_many :permissions, through: :role_permissions
 
-  validates :name, presence: true, uniqueness: { scope: :provider }
+  validates :name, presence: true, uniqueness: { case_sensitive: false, scope: :provider }
+
   validates :provider, presence: true
 
   before_validation :set_role_color, on: :create
@@ -41,12 +42,14 @@ class Role < ApplicationRecord
   def create_role_permissions
     return if %w[Administrator User Guest SuperAdmin].include? name # skip creation for default roles
 
-    Permission.all.find_each do |permission|
+    Permission.find_each do |permission|
       value = case permission.name
               when 'CreateRoom', 'SharedList', 'CanRecord'
                 'true'
               when 'RoomLimit'
                 '100'
+              when 'AccessToVisibilities'
+                Recording::VISIBILITIES.values
               else
                 'false'
               end
@@ -57,15 +60,21 @@ class Role < ApplicationRecord
   private
 
   def set_role_color
-    self.color = case name
-                 when 'Administrator'
-                   '#228B22'
-                 when 'User'
-                   '#4169E1'
-                 when 'Guest'
-                   '#FFA500'
-                 else
-                   "##{SecureRandom.hex(3)}"
-                 end
+    color = case name
+            when 'Administrator'
+              '#228B22'
+            when 'User'
+              '#4169E1'
+            when 'Guest'
+              '#FFA500'
+            else
+              "##{SecureRandom.hex(3)}"
+            end
+
+    raise if Role.exists?(color:, provider:) # Ensure uniqueness
+
+    self.color = color
+  rescue StandardError
+    retry unless Role.exists?(name:, provider:) # Ensure uniqueness for name
   end
 end

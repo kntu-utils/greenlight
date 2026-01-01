@@ -15,46 +15,53 @@
 // with Greenlight; if not, see <http://www.gnu.org/licenses/>.
 
 import {
-  VideoCameraIcon, TrashIcon, PencilSquareIcon, ClipboardDocumentIcon, EllipsisVerticalIcon,
+  VideoCameraIcon, TrashIcon, PencilSquareIcon, ClipboardDocumentIcon,
 } from '@heroicons/react/24/outline';
-import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, Stack, Dropdown,
 } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { useAuth } from '../../contexts/auth/AuthProvider';
 import Spinner from '../shared_components/utilities/Spinner';
 import UpdateRecordingForm from './forms/UpdateRecordingForm';
 import DeleteRecordingForm from './forms/DeleteRecordingForm';
 import Modal from '../shared_components/modals/Modal';
 import { localizeDateTimeString } from '../../helpers/DateTimeHelper';
+import useRedirectRecordingUrl from '../../hooks/mutations/recordings/useRedirectRecordingUrl';
+import SimpleSelect from '../shared_components/utilities/SimpleSelect';
+import CopyRecordingPopover from './CopyRecordingPopover';
 
 // TODO: Amir - Refactor this.
 export default function RecordingRow({
-  recording, visibilityMutation: useVisibilityAPI, deleteMutation: useDeleteAPI, adminTable,
+  recording, visibilityMutation: useVisibilityAPI, deleteMutation: useDeleteAPI, adminTable, dropUp,
 }) {
   const { t } = useTranslation();
-
-  function copyUrls() {
-    const formatUrls = recording.formats.map((format) => format.url);
-    navigator.clipboard.writeText(formatUrls);
-    toast.success(t('toast.success.recording.copied_urls'));
-  }
 
   const visibilityAPI = useVisibilityAPI();
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [display, setDisplay] = useState('invisible');
+  const [showCopyPopover, setShowCopyPopover] = useState(false);
+
   const currentUser = useAuth();
+  const redirectRecordingUrl = useRedirectRecordingUrl();
+  const allowedVisibilities = JSON.parse(currentUser.permissions?.AccessToVisibilities);
+
   const localizedTime = localizeDateTimeString(recording?.recorded_at, currentUser?.language);
   const formats = recording.formats.sort(
     (a, b) => (a.recording_type.toLowerCase() > b.recording_type.toLowerCase() ? 1 : -1),
   );
 
   return (
-    <tr key={recording.id} className="align-middle text-muted border border-2">
+    <tr
+      key={recording.id}
+      className="align-middle text-muted border border-2"
+      onMouseEnter={() => setDisplay('visible')}
+      onMouseLeave={() => setDisplay('invisible')}
+    >
       <td className="border-end-0 text-dark">
         <Stack direction="horizontal" className="py-2">
           <div className="recording-icon-circle rounded-circle me-3 d-flex justify-content-center">
@@ -80,7 +87,7 @@ export default function RecordingRow({
                     aria-hidden="true"
                     onClick={() => !isUpdating && setIsEditing(true)}
                     onBlur={() => setIsEditing(false)}
-                    className="hi-s text-muted ms-1 mb-1"
+                    className={`hi-s text-muted ms-1 mb-1 ${display}`}
                   />
                 </>
                 )
@@ -90,31 +97,72 @@ export default function RecordingRow({
               }
             </strong>
             <span className="small text-muted"> {localizedTime} </span>
+            {adminTable && <span className="small text-muted fw-bold"> {recording?.user_name} </span>}
           </Stack>
         </Stack>
       </td>
-      <td className="border-0"> { t('recording.length_in_minutes', { recording }) } </td>
+      <td className="border-0"> {t('recording.length_in_minutes', { recording })} </td>
       <td className="border-0"> {recording.participants} </td>
       <td className="border-0">
-        {/* TODO: Refactor this. */}
-        <Form.Select
-          className="visibility-dropdown"
-          onChange={(event) => {
-            visibilityAPI.mutate({ visibility: event.target.value, id: recording.record_id });
-          }}
+        <SimpleSelect
           defaultValue={recording.visibility}
-          disabled={visibilityAPI.isLoading}
+          dropUp={dropUp}
         >
-          <option value="Published">{ t('recording.published') }</option>
-          <option value="Unpublished">{ t('recording.unpublished') }</option>
-          {recording?.protectable === true
-            && <option value="Protected">{ t('recording.protected') }</option>}
-        </Form.Select>
+          { (allowedVisibilities.includes('Public/Protected') || recording.visibility === 'Public/Protected') && (
+            <Dropdown.Item
+              key="Public/Protected"
+              value="Public/Protected"
+              onClick={() => visibilityAPI.mutate({ visibility: 'Public/Protected', id: recording.record_id })}
+            >
+              {t('recording.public_protected')}
+            </Dropdown.Item>
+          )}
+
+          { (allowedVisibilities.includes('Public') || recording.visibility === 'Public') && (
+            <Dropdown.Item
+              key="Public"
+              value="Public"
+              onClick={() => visibilityAPI.mutate({ visibility: 'Public', id: recording.record_id })}
+            >
+              {t('recording.public')}
+            </Dropdown.Item>
+          )}
+
+          { (allowedVisibilities.includes('Protected') || recording.visibility === 'Protected') && (
+            <Dropdown.Item
+              key="Protected"
+              value="Protected"
+              onClick={() => visibilityAPI.mutate({ visibility: 'Protected', id: recording.record_id })}
+            >
+              {t('recording.protected')}
+            </Dropdown.Item>
+          )}
+
+          { (allowedVisibilities.includes('Published') || recording.visibility === 'Published') && (
+            <Dropdown.Item
+              key="Published"
+              value="Published"
+              onClick={() => visibilityAPI.mutate({ visibility: 'Published', id: recording.record_id })}
+            >
+              {t('recording.published')}
+            </Dropdown.Item>
+          )}
+
+          { (allowedVisibilities.includes('Unpublished') || recording.visibility === 'Unpublished') && (
+            <Dropdown.Item
+              key="Unpublished"
+              value="Unpublished"
+              onClick={() => visibilityAPI.mutate({ visibility: 'Unpublished', id: recording.record_id })}
+            >
+              {t('recording.unpublished')}
+            </Dropdown.Item>
+          )}
+        </SimpleSelect>
       </td>
       <td className="border-0">
-        {formats.map((format) => (
+        {recording?.visibility !== 'Unpublished' && formats.map((format) => (
           <Button
-            onClick={() => window.open(format.url, '_blank')}
+            onClick={() => redirectRecordingUrl.mutate({ record_id: recording.record_id, format: format.recording_type })}
             className={`btn-sm rounded-pill me-1 mt-1 border-0 btn-format-${format.recording_type.toLowerCase()}`}
             key={`${format.recording_type}-${format.url}`}
           >
@@ -123,47 +171,36 @@ export default function RecordingRow({
         ))}
       </td>
       <td className="border-start-0">
-        {adminTable
-          ? (
-            <Dropdown className="float-end cursor-pointer">
-              <Dropdown.Toggle className="hi-s" as={EllipsisVerticalIcon} />
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => copyUrls()}>
-                  <ClipboardDocumentIcon className="hi-s me-2" />
-                  { t('recording.copy_recording_urls') }
-                </Dropdown.Item>
-                <Modal
-                  modalButton={<Dropdown.Item><TrashIcon className="hi-s me-2" />{ t('delete') }</Dropdown.Item>}
-                  body={(
-                    <DeleteRecordingForm
-                      mutation={useDeleteAPI}
-                      recordId={recording.record_id}
-                    />
-                )}
+        <Stack direction="horizontal" className="float-end recordings-icons">
+          { recording?.visibility !== 'Unpublished' && (
+            <OverlayTrigger
+              trigger="click"
+              show={showCopyPopover}
+              onToggle={(show) => setShowCopyPopover(show)}
+              rootClose
+              overlay={(
+                <CopyRecordingPopover
+                  recording={recording}
+                  formats={formats}
+                  onCopied={() => setShowCopyPopover(false)}
                 />
-              </Dropdown.Menu>
-            </Dropdown>
-          )
-          : (
-            <Stack direction="horizontal" className="float-end recordings-icons">
-              <Button
-                variant="icon"
-                className="mt-1 me-3"
-                onClick={() => copyUrls()}
-              >
+              )}
+            >
+              <Button variant="icon" className="mt-1 me-3" title={t('recording.copy_recording_urls')}>
                 <ClipboardDocumentIcon className="hi-s text-muted" />
               </Button>
-              <Modal
-                modalButton={<Dropdown.Item className="btn btn-icon"><TrashIcon className="hi-s me-2" /></Dropdown.Item>}
-                body={(
-                  <DeleteRecordingForm
-                    mutation={useDeleteAPI}
-                    recordId={recording.record_id}
-                  />
-                )}
-              />
-            </Stack>
+            </OverlayTrigger>
           )}
+          <Modal
+            modalButton={<Dropdown.Item className="btn btn-icon"><TrashIcon className="hi-s me-2" title={t('delete')} /></Dropdown.Item>}
+            body={(
+              <DeleteRecordingForm
+                mutation={useDeleteAPI}
+                recordId={recording.record_id}
+              />
+            )}
+          />
+        </Stack>
       </td>
     </tr>
   );
@@ -171,6 +208,7 @@ export default function RecordingRow({
 
 RecordingRow.defaultProps = {
   adminTable: false,
+  dropUp: false,
 };
 
 RecordingRow.propTypes = {
@@ -188,8 +226,10 @@ RecordingRow.propTypes = {
     protectable: PropTypes.bool,
     recorded_at: PropTypes.string.isRequired,
     map: PropTypes.func,
+    user_name: PropTypes.string,
   }).isRequired,
   visibilityMutation: PropTypes.func.isRequired,
   deleteMutation: PropTypes.func.isRequired,
   adminTable: PropTypes.bool,
+  dropUp: PropTypes.bool,
 };

@@ -14,15 +14,20 @@
   "report": "Report",
   "share": "Share",
   "cancel": "Cancel",
+  "reset":   "Reset",
   "close": "Close",
   "delete": "Delete",
   "copy": "Copy Join Link",
+  "copy_viewer_code": "Copy Viewer Code",
+  "copy_moderator_code": "Copy Moderator Code",
   "or": "Or",
   "online": "Online",
   "help_center": "Help Center",
   "are_you_sure": "Are you sure?",
   "return_home": "Return Home",
   "created_at": "Created at",
+  "view_recordings": "View Recordings",
+  "join_session": "Join Session",
   "no_result_search_input": "Could not find any results for \"{{ searchInput }}\"",
   "action_permanent": "This action cannot be undone.",
   "homepage": {
@@ -95,6 +100,7 @@
       "account_info": "Account Info",
       "delete_account": "Delete Account",
       "change_password": "Change Password",
+      "set_password": "Set Your New Password",
       "reset_password": "Reset Password",
       "update_account_info": "Update Account Info",
       "current_password": "Current Password",
@@ -124,7 +130,7 @@
     "delete_room": "Delete Room",
     "create_new_room": "Create New Room",
     "enter_room_name": "Enter the room name",
-    "shared_by": "shared by ",
+    "shared_by": "shared by",
     "last_session": "Last Session: {{ localizedTime }}",
     "no_last_session": "No previous session created",
     "search_not_found": "No Rooms Found",
@@ -142,7 +148,8 @@
       "presentation": "Presentation",
       "click_to_upload": "Click to Upload",
       "drag_and_drop": " or drag and drop",
-      "upload_description": "Upload any office document or PDF file. Depending on the size of the file, it may require additional time to upload before it can be used",
+      "upload_description": "Upload any office document or PDF file (not larger than {{size}}). Depending on the size of the file, it may require additional time to upload before it can be used",
+      "delete_presentation": "Delete Presentation",
       "are_you_sure_delete_presentation": "Are you sure you want to delete this presentation?"
     },
     "shared_access": {
@@ -176,6 +183,10 @@
       "wrong_access_code": "Wrong Access Code",
       "generate_viewers_access_code": "Generate access code for viewers",
       "generate_mods_access_code": "Generate access code for moderators",
+      "server_tag": "Select a server type for this room",
+      "default_tag_name": "Default",
+      "server_tag_desired": "Desired",
+      "server_tag_required": "Required",
       "are_you_sure_delete_room": "Are you sure you want to delete this room?",
       "name": "Name",
       "name_placeholder": "Please Enter Your Name"
@@ -184,6 +195,7 @@
   "recording": {
     "recording": "Recording",
     "recordings": "Recordings",
+    "processing": "Recordings Processing...",
     "name": "Name",
     "length": "Length",
     "users": "Users",
@@ -192,11 +204,24 @@
     "published": "Published",
     "unpublished": "Unpublished",
     "protected": "Protected",
+    "public": "Public",
+    "public_protected": "Public/Protected",
+    "formats_help": "Shows the available playback types (for example, Presentation or Video). Clicking a format opens the BigBlueButton recording in a new tab.",
+    "visibility_help": {
+      "title": "Recording visibility options",
+      "public_protected": "Public/Protected - The recording is available on the Public Recordings page that can be reached from the Room Join page. The link can only be viewed from within Greenlight",
+      "public": "Public - The recording is available on the Public Recordings page that can be reached from the Room Join page. The link can be shared with anyone",
+      "protected": "Protected - The recording must be viewed from within Greenlight",
+      "published": "Published - The recording is accessible to anyone with the link",
+      "unpublished": "Unpublished - The recording is not accessible to anyone"
+    },
     "length_in_minutes": "{{recording.length}} min.",
     "processing_recording": "Processing recording, this may take several minutes...",
     "copy_recording_urls": "Copy Recording Url(s)",
     "recordings_list_empty": "You don't have any recordings yet!",
+    "public_recordings_list_empty": "There are no public recordings yet!",
     "recordings_list_empty_description": "Recordings will appear here after you start a meeting and record it.",
+    "public_recordings_list_empty_description": "Recordings will appear here when available.",
     "delete_recording": "Delete Recording",
     "are_you_sure_delete_recording": "Are you sure you want to delete this recording?",
     "search_not_found": "No Recordings Found"
@@ -212,6 +237,8 @@
       "banned": "Banned",
       "ban": "Ban",
       "unban": "Unban",
+      "unverified": "Unverified",
+      "verify": "Verify",
       "deleted": "Deleted",
       "invited_tab": "Invited",
       "invite_user": "Invite User",
@@ -235,11 +262,14 @@
       "empty_pending_users_subtext": "When a user's status gets changed to pending, they will appear here.",
       "empty_banned_users": "There are no banned users on this server yet!",
       "empty_banned_users_subtext": "When a user's status gets changed to banned, they will appear here.",
+      "empty_unverified_users": "There are no unverified users on this server yet!",
+      "empty_unverified_users_subtext": "Any unverified users will appear here.",
       "empty_invited_users": "There are no invited users on this server yet!",
       "empty_invited_users_subtext": "When a user's status gets changed to invited, they will appear here.",
       "invited": {
         "time_sent": "Time Sent",
-        "valid": "Valid"
+        "valid": "Valid",
+        "revoke": "Revoke"
       }
     },
     "server_rooms": {
@@ -276,17 +306,23 @@
         "brand_image": "Brand Image",
         "click_to_upload": "Click to Upload",
         "drag_and_drop": " or drag and drop",
-        "upload_brand_image_description": "Upload any PNG, JPG, or SVG file. Depending on the size of the file, it may require additional time to upload before it can be used",
+        "upload_brand_image_description": "Upload any PNG, JPG, or SVG file (not larger than {{size}}). Depending on the size of the file, it may require additional time to upload before it can be used",
         "remove_branding_image": "Remove Branding Image"
       },
       "administration": {
         "administration": "Administration",
         "terms": "Terms & Conditions",
-        "privacy": "Privacy Policy",
-        "privacy_policy": "Privacy Policy",
+        "privacy": "Privacy Notice",
+        "privacy_policy": "Privacy Notice",
         "change_term_links": "Change the terms links that appears at the bottom of the page",
         "change_privacy_link": "Change the privacy link that appears at the bottom of the page",
+        "helpcenter": "Help Center",
+        "change_helpcenter_link": "Change the help center link that appears under the profile dropdown",
+        "maintenance": "Maintenance Banner",
+        "change_maintenance_text": "Change the maintenance banner text that appears in the header",
         "change_url": "Change URL",
+        "set_text": "Set Text",
+        "clear_banner": "Clear Banner",
         "enter_link": "Enter link here"
       },
       "settings": {
@@ -294,12 +330,20 @@
         "allow_users_to_share_rooms": "Allow Users to Share Rooms",
         "allow_users_to_share_rooms_description": "Setting to disabled will remove the button from the room options dropdown, preventing users from sharing rooms",
         "allow_users_to_preupload_presentation": "Allow Users to Preupload Presentations",
-        "allow_users_to_preupload_presentation_description": "Users can preupload a presentation to be used as the default presentation for that specific room"
+        "allow_users_to_preupload_presentation_description": "Users can preupload a presentation to be used as the default presentation for that specific room",
+        "show_sign_in_on_room_join": "Show Sign In Link on Room Join",
+        "show_sign_in_on_room_join_description": "If the user is not signed in, a sign-in link appears at the bottom of the card when entering a room",
+        "default_visibility": "Default Recording Visibility",
+        "default_visibility_description": "All newly created recordings will have this visibility by default",
+        "session_timeout": "Session Timeout",
+        "session_timeout_description": "You can configure the session timeout with a default cookie of 1 day or extended session cookie of 7 days",
+        "default_session_timeout": "Default (1 day)",
+        "extended_session_timeout": "Extended (7 days)"
       },
       "registration": {
         "registration": "Registration",
         "role_mapping_by_email": "Role Mapping By Email",
-        "role_mapping_by_email_description": "Map the user to a role using their email. Must be in the format: role1=email1, role2=email2",
+        "role_mapping_by_email_description": "Map the user to a role using their email. Must be in the format: role1=email1,role2=email2",
         "enter_role_mapping_rule": "Enter a role mapping rule",
         "resync_on_login": "Resync User Data On Every Sign In",
         "resync_on_login_description": "Resync a user's information every time they sign in, making the external authentication provider always match the information in server",
@@ -311,7 +355,10 @@
           "open": "Open Registration",
           "invite": "Join by Invitation",
           "approval": "Approve/Decline"
-        }
+        },
+        "allowed_domains": "Allowed Email Domains",
+        "allowed_domains_signup_description": "Allow specific email domains to sign up. Format must be: @test.com,domain.com",
+        "enter_allowed_domains_rule" : "Enter the allowed domains"
       }
     },
     "room_configuration": {
@@ -362,7 +409,9 @@
         "manage_site_settings": "Allow users with this role to manage site settings",
         "manage_roles": "Allow users with this role to edit other roles",
         "shared_list": "Include users with this role in the dropdown for sharing rooms",
-        "room_limit": "Room Limit"
+        "room_limit": "Room Limit",
+        "email_on_signup": "Receive an email when a new user signs up",
+        "allowed_recording_visibility": "Allowed recording visibilities"
       }
     }
   },
@@ -373,6 +422,7 @@
         "user_updated": "The user has been updated.",
         "user_deleted": "The user has been deleted.",
         "avatar_updated": "The avatar has been updated.",
+        "password_changed": "Successfully updated your password. Please sign in again.",
         "password_updated": "The password has been updated.",
         "account_activated": "Your account has been activated.",
         "activation_email_sent": "An email that contains the instructions to activate your account has been sent.",
@@ -397,21 +447,26 @@
         "access_code_copied": "The access code has been copied.",
         "access_code_generated": "A new access code has been generated.",
         "access_code_deleted": "The access code has been deleted.",
-        "copied_meeting_url": "The meeting URL has been copied. The link can be used to join the meeting."
+        "copied_meeting_url": "The meeting URL has been copied. The link can be used to join the meeting.",
+        "copied_viewer_code": "The viewer access code has been copied.",
+        "copied_moderator_code": "The moderator access code has been copied."
       },
       "site_settings": {
         "site_setting_updated": "The site setting has been updated.",
         "brand_color_updated": "The brand color has been updated.",
         "brand_image_updated": "The brand image has been updated.",
         "brand_image_deleted": "The brand image has been deleted.",
-        "privacy_policy_updated": "The privacy policy has been updated.",
-        "terms_of_service_updated": "The terms of service have been updated."
+        "privacy_policy_updated": "The privacy notice has been updated.",
+        "helpcenter_updated": "The help center link has been updated.",
+        "terms_of_service_updated": "The terms of service have been updated.",
+        "maintenance_updated": "The maintenance banner has been updated.",
+        "allowed_domains_signup_updated": "The allowed email domains have been updated."
       },
       "recording": {
         "recording_visibility_updated": "The recording visibility has been updated.",
         "recording_name_updated": "The recording name has been updated.",
         "recording_deleted": "The recording has been deleted.",
-        "copied_urls": "The recording URLs have been copied."
+        "copied_urls": "The recording URL has been copied."
       },
       "role": {
         "role_created": "A new role has been created.",
@@ -420,15 +475,18 @@
         "role_permission_updated": "The role permission has been updated."
       },
       "invitations": {
-        "invitation_sent": "An invitation has been sent."
+        "invitation_sent": "An invitation has been sent.",
+        "invitation_revoked": "An invitation has been revoked"
       }
     },
     "error": {
       "problem_completing_action": "The action can't be completed. \n Please try again.",
+      "server_type_unavailable": "The required server type is unavailable. Please select a different type in the room settings.",
       "file_type_not_supported": "The file type is not supported.",
       "file_size_too_large": "The file size is too large.",
       "file_upload_error": "The file can't be uploaded.",
       "signin_required": "You must be signed in to access this page.",
+      "malware_detected": "Malware Detected! The file you uploaded may contain malware. Please check your file and try again.",
       "roles": {
         "role_assigned": "This role can't be deleted because it is assigned to at least one user."
       },
@@ -438,7 +496,8 @@
         "email_exists": "An account under this email already exists. Please try again with another email.",
         "old_password": "The password you have entered is incorrect.",
         "pending": "Your registration is pending approval from the administrator. Please try again later.",
-        "banned": "You do not have access to this application. Please contact your administrator if you believe this is a mistake."
+        "banned": "You do not have access to this application. Please contact your administrator if you believe this is a mistake.",
+        "hcaptcha_invalid": "The CAPTCHA verification failed. Please try again."
       },
       "rooms": {
         "room_limit": "The room can't be created due to reaching the room limit."
@@ -513,8 +572,18 @@
           "min": "Name must be at least 2 characters long"
         }
       },
+      "room_join": {
+        "name": {
+          "required": "Please enter your name."
+        }
+      },
       "url": {
         "invalid": "Invalid URL"
+      },
+      "text_form": {
+        "value": {
+          "required": "Please enter some message"
+        }
       }
     },
     "room": {
@@ -522,6 +591,21 @@
         "name": {
           "label": "Room Name",
           "placeholder": "Enter a room name..."
+        }
+      }
+    },
+    "room_join": {
+      "fields": {
+        "name": {
+            "label": "Name",
+            "placeholder": "Enter your name"
+        },
+        "access_code": {
+          "label": "Access Code",
+          "placeholder": "Enter the access code"
+        },
+        "recording_consent": {
+          "label": "I acknowledge that this session may be recorded. This may include my voice and video if enabled."
         }
       }
     },
@@ -655,7 +739,8 @@
       "site_settings": {
         "fields": {
           "value": {
-            "placeholder": "Enter link here..."
+            "placeholder": "Enter link here...",
+            "text_placeholder": "Enter text here..."
           }
         }
       },

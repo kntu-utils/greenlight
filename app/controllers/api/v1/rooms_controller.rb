@@ -19,9 +19,9 @@
 module Api
   module V1
     class RoomsController < ApiController
-      skip_before_action :ensure_authenticated, only: %i[public_show]
+      skip_before_action :ensure_authenticated, only: %i[public_show public_recordings]
 
-      before_action :find_room, only: %i[show update destroy recordings recordings_processing purge_presentation public_show]
+      before_action :find_room, only: %i[show update destroy recordings recordings_processing purge_presentation public_show public_recordings]
 
       before_action only: %i[create] do
         ensure_authorized('CreateRoom')
@@ -40,7 +40,8 @@ module Api
       # Returns a list of the current_user's rooms and shared rooms
       def index
         shared_rooms = SharedAccess.where(user_id: current_user.id).select(:room_id)
-        rooms = Room.where(user_id: current_user.id)
+        rooms = Room.includes(:user)
+                    .where(user_id: current_user.id)
                     .or(Room.where(id: shared_rooms))
                     .order(online: :desc)
                     .order('last_session DESC NULLS LAST')
@@ -50,7 +51,7 @@ module Api
           room.shared = true if room.user_id != current_user.id
         end
 
-        RunningMeetingChecker.new(rooms:, provider: current_provider).call
+        RunningMeetingChecker.new(rooms: rooms.select(&:online)).call if rooms.any?(&:online)
 
         render_data data: rooms, status: :ok
       end
@@ -58,7 +59,7 @@ module Api
       # GET /api/v1/rooms/:friendly_id.json
       # Returns the info on a specific room
       def show
-        RunningMeetingChecker.new(rooms: @room, provider: current_provider).call if @room.online
+        RunningMeetingChecker.new(rooms: @room).call if @room.online
 
         settings = RoomSettingsGetter.new(
           room_id: @room.id,
@@ -103,7 +104,7 @@ module Api
 
         if room.save
           logger.info "room(friendly_id):#{room.friendly_id} created for user(id):#{room.user_id}"
-          render_data status: :created
+          render_data data: "/rooms/#{room.friendly_id}", status: :created
         else
           render_error errors: room.errors.to_a, status: :bad_request
         end
@@ -112,7 +113,7 @@ module Api
       # PATCH /api/v1/rooms/:friendly_id.json
       # Updates the values of the specified room
       def update
-        if @room.update(room_params)
+        if @room.update(room_params.except(:user_id))
           render_data status: :ok
         else
           render_error errors: @room.errors.to_a, status: :bad_request
@@ -142,8 +143,18 @@ module Api
       def recordings
         sort_config = config_sorting(allowed_columns: %w[name length visibility])
 
-        pagy, room_recordings = pagy(@room.recordings&.order(sort_config, recorded_at: :desc)&.search(params[:q]))
+        pagy, room_recordings = pagy(@room.recordings&.order(sort_config, recorded_at: :desc)&.search(params[:search]), items: 3)
         render_data data: room_recordings, meta: pagy_metadata(pagy), status: :ok
+      end
+
+      # GET /api/v1/rooms/:friendly_id/public_recordings.json
+      # Returns all of a specific room's PUBLIC recordings
+      def public_recordings
+        sort_config = config_sorting(allowed_columns: %w[name length])
+
+        pagy, recordings = pagy(@room.public_recordings.order(sort_config, recorded_at: :desc).public_search(params[:search]))
+
+        render_data data: recordings, meta: pagy_metadata(pagy), serializer: PublicRecordingSerializer, status: :ok
       end
 
       # GET /api/v1/rooms/:friendly_id/recordings_processing.json

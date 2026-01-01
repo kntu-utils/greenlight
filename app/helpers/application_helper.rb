@@ -19,6 +19,14 @@
 module ApplicationHelper
   def branding_image
     asset_path = SettingGetter.new(setting_name: 'BrandingImage', provider: current_provider).call
-    asset_url(asset_path)
+    asset_url(asset_path, host: ENV.fetch('URL_HOST', nil))
+  end
+
+  def page_title
+    match = request&.url&.match('\/rooms\/(\w{3}-\w{3}-\w{3}-\w{3})')
+    return I18n.t('head.title') if match.blank?
+
+    room_name = Room.find_by(friendly_id: match[1])&.name
+    room_name || I18n.t('head.title')
   end
 end

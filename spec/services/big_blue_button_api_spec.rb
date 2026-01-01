@@ -49,9 +49,43 @@ describe BigBlueButtonApi, type: :service do
   describe '#update_recordings' do
     it 'calls bbb_api #update_recordings with the passed options' do
       allow_any_instance_of(BigBlueButton::BigBlueButtonApi).to receive(:update_recordings).and_return(true)
-      expect_any_instance_of(BigBlueButton::BigBlueButtonApi).to receive(:update_recordings).with('recording_id', {},
+      expect_any_instance_of(BigBlueButton::BigBlueButtonApi).to receive(:update_recordings).with('recording_id', nil,
                                                                                                   { 'meta_recording-name': 'recording_new_name' })
       bbb_service.update_recordings(record_id: 'recording_id', meta_hash: { 'meta_recording-name': 'recording_new_name' })
+    end
+  end
+
+  describe '#update_recording_visibility' do
+    let(:recording) { create(:recording) }
+
+    def expect_to_update_recording_props_to(publish:, protect:, list:, visibility:)
+      expect_any_instance_of(BigBlueButtonApi).to receive(:publish_recordings).with(record_ids: recording.record_id, publish:)
+      expect_any_instance_of(BigBlueButtonApi).to receive(:update_recordings).with(record_id: recording.record_id,
+                                                                                   meta_hash: {
+                                                                                     protect:, 'meta_gl-listed': list
+                                                                                   })
+
+      bbb_service.update_recording_visibility(record_id: recording.record_id, visibility:)
+    end
+
+    it 'changes the recording visibility to "Published"' do
+      expect_to_update_recording_props_to(publish: true, protect: false, list: false, visibility: Recording::VISIBILITIES[:published])
+    end
+
+    it 'changes the recording visibility to "Unpublished"' do
+      expect_to_update_recording_props_to(publish: false, protect: false, list: false, visibility: Recording::VISIBILITIES[:unpublished])
+    end
+
+    it 'changes the recording visibility to "Protected"' do
+      expect_to_update_recording_props_to(publish: true, protect: true, list: false, visibility: Recording::VISIBILITIES[:protected])
+    end
+
+    it 'changes the recording visibility to "Public"' do
+      expect_to_update_recording_props_to(publish: true, protect: false, list: true, visibility: Recording::VISIBILITIES[:public])
+    end
+
+    it 'changes the recording visibility to "Public/Protected"' do
+      expect_to_update_recording_props_to(publish: true, protect: true, list: true, visibility: Recording::VISIBILITIES[:public_protected])
     end
   end
 end

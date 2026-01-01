@@ -14,15 +14,20 @@
   "report": "Jelentés",
   "share": "Megosztás",
   "cancel": "Mégse",
+  "reset":   "Reszetelés",
   "close": "Bezárás",
   "delete": "Törlés",
   "copy": "Másolás",
+  "copy_viewer_code": "Megtekintési kód másolása",
+  "copy_moderator_code": "Moderátor kód másolása",
   "or": "Vagy",
   "online": "Online",
   "help_center": "Súgóközpont",
   "are_you_sure": "Biztos benne?",
   "return_home": "Vissza a kezdőlapra",
   "created_at": "Létrehozva:",
+  "view_recordings": "Felvételek megtekintése",
+  "join_session": "Csatlakozás a munkamenethez",
   "no_result_search_input": "Nincs találat a következőre: „{{ searchInput }}”",
   "action_permanent": "Ez a művelet nem vonható vissza.",
   "homepage": {
@@ -79,6 +84,7 @@
       "account_info": "Fiókinformációk",
       "delete_account": "Fiók törlése",
       "change_password": "Jelszó módosítása",
+      "set_password": "Adja meg új jelszavát",
       "reset_password": "Jelszó visszaállítása",
       "update_account_info": "Saját fiókinformációk frissítése",
       "current_password": "Jelenlegi jelszó",
@@ -108,7 +114,7 @@
     "delete_room": "Szoba törlése",
     "create_new_room": "Új szoba létrehozása",
     "enter_room_name": "Adja meg a szoba nevét",
-    "shared_by": "megosztotta:",
+    "shared_by": "megosztotta",
     "last_session": "Legutóbbi munkamenet: {{ room.last_session }}",
     "no_last_session": "Nem voltak munkamenetek létrehozva",
     "search_not_found": "Nem találhatók szobák",
@@ -126,7 +132,8 @@
       "presentation": "Bemutató",
       "click_to_upload": "Kattintson a feltöltéshez",
       "drag_and_drop": "vagy húzza és ejtse ide",
-      "upload_description": "Tetszőleges irodai dokumentum vagy PDF-fájl feltöltése.  A fájl méretétől függően több időre lehet szükség, mielőtt használható lesz.",
+      "upload_description": "Tetszőleges dokumentum- vagy PDF-fájl (nem nagyobb, mint {{size}}). A használata előtt a fájl méretétől függően idő szükséges a feltöltéséhez.",
+      "delete_presentation": "Bemutató törlése",
       "are_you_sure_delete_presentation": "Biztos, hogy törli ezt a bemutatót?"
     },
     "shared_access": {
@@ -157,12 +164,17 @@
       "wrong_access_code": "Hibás hozzáférési kód",
       "generate_viewers_access_code": "Hozzáférési kód előállítása a látogatók számára",
       "generate_mods_access_code": "Hozzáférési kód előállítása a moderátorok számára",
+      "server_tag": "Válasszon szervertípust a szobához",
+      "default_tag_name": "Alapértelmezett",
+      "server_tag_desired": "Kívánt",
+      "server_tag_required": "Kötelező",
       "are_you_sure_delete_room": "Biztos, hogy törli ezt a szobát?"
     }
   },
   "recording": {
     "recording": "Felvétel",
     "recordings": "Felvételek",
+    "processing": "Felvétel folyamatban...",
     "name": "Név",
     "length": "Hossz",
     "users": "Felhasználók",
@@ -171,17 +183,21 @@
     "published": "Közzétéve",
     "unpublished": "Nincs közzétéve",
     "protected": "Védett",
+    "public": "Nyilvános",
+    "public_protected": "Nyilvános /Védett",
     "length_in_minutes": "{{recording.length}} perc",
     "processing_recording": "A felvétel feldolgozása néhány percig eltarthat...",
     "copy_recording_urls": "Felvételek webcímének másolása",
     "recordings_list_empty": "Még nincs egy felvétele sem.",
+    "public_recordings_list_empty": "Még egy nyilvános felvétel sincs!",
     "recordings_list_empty_description": "A felvételek itt fognak megjelenni, ha indít és felvesz egy találkozót.",
+    "public_recordings_list_empty_description": "Az elérhető felvételek itt jelennek meg.",
     "delete_recording": "Felvétel törlése",
     "are_you_sure_delete_recording": "Biztos, hogy törli ezt a felvételt?",
     "search_not_found": "Nem található felvétel"
   },
   "admin": {
-    "admin_panel": "Adminisztrátori panel",
+    "admin_panel": "Üzemeltetői panel",
     "manage_users": {
       "manage_users": "Felhasználók kezelése",
       "active": "Aktív",
@@ -191,6 +207,8 @@
       "banned": "Kitiltott",
       "ban": "Kitiltás",
       "unban": "Kitiltás visszavonása",
+      "unverified": "Ellenőrizetlen",
+      "verify": "Ellenőrzés",
       "deleted": "Törölve",
       "invited_tab": "Meghívva",
       "invite_user": "Felhasználó meghívása",
@@ -214,11 +232,14 @@
       "empty_pending_users_subtext": "Ha egy felhasználó állapota függőben lévővé válik, akkor itt fog megjelenni.",
       "empty_banned_users": "Még nincs kitiltott felhasználó ezen a kiszolgálón.",
       "empty_banned_users_subtext": "Ha egy felhasználó állapota kitiltottá válik, akkor itt fog megjelenni.",
+      "empty_unverified_users": "Egy ellenőrizetlen felhasználó sincs még a szerveren!",
+      "empty_unverified_users_subtext": "Az ellenőrizetlen felhasználók itt jelennek meg.",
       "empty_invited_users": "Még nincs meghívott felhasználó ezen a kiszolgálón.",
       "empty_invited_users_subtext": "Ha egy felhasználó állapota meghívottá válik, akkor itt fog megjelenni.",
       "invited": {
         "time_sent": "Küldési idő",
-        "valid": "Érvényes"
+        "valid": "Érvényes",
+        "revoke": "Visszavonás"
       }
     },
     "server_rooms": {
@@ -255,17 +276,23 @@
         "brand_image": "Márkakép",
         "click_to_upload": "Kattintson a feltöltéshez",
         "drag_and_drop": "vagy húzza és ejtse ide",
-        "upload_brand_image_description": "Töltsön fel egy tetszőleges PNG, JPG vagy SVG-fájlt. A fájl méretétől függően több időre lehet szükség, mielőtt használható lesz.",
+        "upload_brand_image_description": "Tetszőleges PNG, JPG, vagy SVG fájl (nem nagyobb, mint {{size}}). A használata előtt a fájl méretétől függően idő szükséges a feltöltéséhez.",
         "remove_branding_image": "Márkakép eltávolítása"
       },
       "administration": {
         "administration": "Üzemeltetés",
         "terms": "Felhasználási feltételek",
-        "privacy": "Adatvédelmi nyilatkozat",
-        "privacy_policy": "Adatvédelmi nyilatkozat",
+        "privacy": "Adatvédelmi közlemény",
+        "privacy_policy": "Adatvédelmi közlemény",
         "change_term_links": "A lap alján megjelenő felhasználási feltételek hivatkozásának módosítása",
         "change_privacy_link": "A lap alján megjelenő adatvédelmi hivatkozás módosítása",
+        "helpcenter": "Súgóközpont",
+        "change_helpcenter_link": "A profil legördülő alatt megjelenő Súgóközpont link módosítsa",
+        "maintenance": "Karbantartási szalaghirdetés",
+        "change_maintenance_text": "A fejlécben megjelenő karbantartási szalaghirdetés szövegének módosítása.",
         "change_url": "Webcím módosítása",
+        "set_text": "Szöveg beállítása",
+        "clear_banner": "Szalaghirdetés törlése",
         "enter_link": "Itt adja meg a hivatkozást"
       },
       "settings": {
@@ -273,7 +300,15 @@
         "allow_users_to_share_rooms": "A felhasználók megoszthatják a szobákat",
         "allow_users_to_share_rooms_description": "A letiltása eltávolítja a gombot a szobák legördülő menüjében, így a felhasználók nem tudják megosztani a szobákat",
         "allow_users_to_preupload_presentation": "A felhasználók előre feltöltheti a bemutatójukat",
-        "allow_users_to_preupload_presentation_description": "A felhasználók előre feltöltheti a használandó bemutatójukat az adott szoba alapértelmezett bemutatójaként"
+        "allow_users_to_preupload_presentation_description": "A felhasználók előre feltöltheti a használandó bemutatójukat az adott szoba alapértelmezett bemutatójaként",
+        "show_sign_in_on_room_join": "A Csapatszobába csatlakozáskor a Bejelentkezés link megjelenítése",
+        "show_sign_in_on_room_join_description": "A még be nem jelentkezett felhasználóknak a szobába belépéskor a kártya alján megjelenik a Bejelentkezés link",
+        "default_visibility": "Felvétel alapértelmezett láthatósága",
+        "default_visibility_description": "Alapértelmezés szerint minden újonnan létrehozott felvételnél ez lesz a láthatóság",
+        "session_timeout": "Munkamenet időtúllépése",
+        "session_timeout_description": "A munkamenet időtúllépését az alapértelmezett 1 napos vagy a kiterjesztett 7 napos munkamenet sütire konfigurálhatja",
+        "default_session_timeout": "Alapértelmezett (1 nap)",
+        "extended_session_timeout": "Kiterjesztett (7 nap)"
       },
       "registration": {
         "registration": "Regisztráció",
@@ -290,7 +325,10 @@
           "open": "Nyílt regisztráció",
           "invite": "Csatlakozás meghívással",
           "approval": "Engedélyezés/elutasítás"
-        }
+        },
+        "allowed_domains": "Engedélyezett e-mail domainek",
+        "allowed_domains_signup_description": "Meghatározott e-mail domainek regisztrációjának engedélyezése. A helyes formátum: @test.hu, domain.hu",
+        "enter_allowed_domains_rule" : "Adja meg az engedélyezett domaineket"
       }
     },
     "room_configuration": {
@@ -321,7 +359,7 @@
     "roles": {
       "role": "Szerepkör",
       "roles": "Szerepkörök",
-      "administrator": "Adminisztrátor",
+      "administrator": "Üzemeltető",
       "guest": "Vendég",
       "manage_roles": "Szerepkörök kezelése",
       "delete_role": "Szerepkör törlése",
@@ -341,7 +379,9 @@
         "manage_site_settings": "Az ezzel a szerepkörrel rendelkező felhasználók kezelhetik az oldal beállításait",
         "manage_roles": "Az ezzel a szerepkörrel rendelkező felhasználók kezelhetik a többi szerepkört",
         "shared_list": "Az ezzel a szerepkörrel rendelkezők felhasználók belevétele a szoba megosztásakor megjelenő legördülő listába",
-        "room_limit": "Szobakorlát"
+        "room_limit": "Szobakorlát",
+        "email_on_signup": "E-mail küldése új felhasználó regisztrációjakor",
+        "allowed_recording_visibility": "Felvétel engedélyezett láthatóságai"
       }
     }
   },
@@ -350,8 +390,9 @@
       "user": {
         "user_created": "Új felhasználó létrehozva.",
         "user_updated": "Felhasználó frissítve.",
-        "user_deleted": "Felhasználó törölve.",
+        "user_deleted": "A felhasználót sikeresen törölte.",
         "avatar_updated": "Profilkép frissítve.",
+        "password_changed": "Jelszavát sikeresen módosította, kérem, jelentkezzen be.",
         "password_updated": "Jelszó frissítve.",
         "account_activated": "A fiókját aktiválták.",
         "activation_email_sent": "Aktiváló e-mail elküldve",
@@ -362,9 +403,9 @@
       },
       "room": {
         "room_created": "Szoba létrehozva.",
-        "room_updated": "Szoba frissítve.",
-        "room_deleted": "Szoba törölve.",
-        "room_shared": "Szoba megosztva",
+        "room_updated": "A szobát sikeresen módosította.",
+        "room_deleted": "A szobát sikeresen törölte.",
+        "room_shared": "A szobát sikeresen megosztotta.",
         "room_unshared": "Szoba megosztása visszavonva",
         "recordings_synced": "A szoba felvételei most már szinkronizálva vannak",
         "room_configuration_updated": "Szoba beállításai frissítve.",
@@ -373,41 +414,49 @@
         "presentation_deleted": "Bemutató törölve.",
         "joining_meeting": "Csatlakozás a találkozóhoz…",
         "meeting_started": "Találkozó elindítva.",
-        "access_code_copied": "Hozzáférési kód másolva.",
+        "access_code_copied": "A hozzáférési kódot sikeresen lemásolta.",
         "access_code_generated": "Hozzáférési kód előállítva.",
-        "access_code_deleted": "Hozzáférési kód törölve.",
-        "copied_meeting_url": "A találkozó webcíme másolva. A hivatkozás a találkozóhoz csatlakozáshoz használható"
+        "access_code_deleted": "Hozzáférési kódot sikeresen törölte.",
+        "copied_meeting_url": "A találkozó webcíme másolva. A hivatkozás a találkozóhoz csatlakozáshoz használható",
+        "copied_viewer_code": "A megtekintési kódot sikeresen lemásolta.",
+        "copied_moderator_code": "A moderátori hozzáférési kódot sikeresen lemásolta."
       },
       "site_settings": {
         "site_setting_updated": "Oldalbeállítás frissítve.",
-        "brand_color_updated": "Márkaszín frissítve.",
-        "brand_image_updated": "Márkakép frissítve.",
-        "brand_image_deleted": "Márkakép törölve.",
-        "privacy_policy_updated": "Adatvédelmi nyilatkozat frissítve.",
-        "terms_of_service_updated": "A szolgáltatási feltételek frissítésre kerültek."
+        "brand_color_updated": "A márkaszín sikerese módosította.",
+        "brand_image_updated": "A márkaképet sikeresen módosította.",
+        "brand_image_deleted": "A márkakép sikeresen törölte.",
+        "privacy_policy_updated": "Az adatvédelmi közleményt frissítették.",
+        "helpcenter_updated": "A Súgóközpont linkjét sikeresen módosította.",
+        "terms_of_service_updated": "A szolgáltatási feltételek frissítésre kerültek.",
+        "maintenance_updated": "A karbantartási szalaghirdetést frissítettük.",
+        "allowed_domains_signup_updated": "Az engedélyezett email domaineket sikeresen módosította."
       },
       "recording": {
         "recording_visibility_updated": "Felvétel láthatósága frissítve.",
         "recording_name_updated": "Felvétel neve frissítve.",
-        "recording_deleted": "Felvétel törölve.",
+        "recording_deleted": "A felvételt sikeresen törölte.",
         "copied_urls": "A felvétel webcímei másolva."
       },
       "role": {
         "role_created": "Szerepkör létrehozva.",
-        "role_updated": "Szerepkör frissítve.",
-        "role_deleted": "Szerepkör törölve.",
+        "role_updated": "A szerepkört sikeresen módosította.",
+        "role_deleted": "A szerepkört sikeresen törölte.",
         "role_permission_updated": "Szerepkör jogosultsága frissítve"
       },
       "invitations": {
-        "invitation_sent": "Meghívó elküldve"
+        "invitation_sent": "Meghívó elküldve",
+        "invitation_revoked": "A meghívást visszautasították"
       }
     },
     "error": {
       "problem_completing_action": "Probléma lépett fel a művelet befejezése során. \n Próbálja újra.",
+      "server_type_unavailable": "A kiválasztott szervertípus nem érhető el. Kérem, válasszon másikat.",
       "file_type_not_supported": "A fájltípus nem támogatott.",
       "file_size_too_large": "A fájl túl nagy.",
       "file_upload_error": "A fájlt nem sikerült feltölteni.",
       "signin_required": "Be kell jelentkeznie, hogy elérje ezt az oldalt",
+      "malware_detected": "Rosszindulatú kódot érzékeltünk! A feltöltött fájl valószínű Rosszindulatú kódot tartalmaz. Kérem, ellenőrizze a fájlt és próbálja újra feltölteni.",
       "roles": {
         "role_assigned": "Ez a szerepkör nem törölhető, mert legalább egy felhasználóhoz hozzá van rendelve."
       },
@@ -492,8 +541,18 @@
           "min": "A névnek legalább 2 karakteresnek kell lennie"
         }
       },
+      "room_join": {
+        "name": {
+          "required": "Adja meg a nevét."
+        }
+      },
       "url": {
         "invalid": "Érvénytelen webcím"
+      },
+      "text_form": {
+        "value": {
+          "required": "Írjon egy üzenetet"
+        }
       }
     },
     "room": {
@@ -501,6 +560,21 @@
         "name": {
           "label": "Szoba neve",
           "placeholder": "Adja meg a szoba nevét…"
+        }
+      }
+    },
+    "room_join": {
+      "fields": {
+        "name": {
+            "label": "Név",
+            "placeholder": "Adja meg a nevét"
+        },
+        "access_code": {
+          "label": "Hozzáférési kód",
+          "placeholder": "Adja meg a hozzáférési kódot"
+        },
+        "recording_consent": {
+          "label": "Tudomásul veszem, hogy ez a munkamenet rögzíthető. Ez vonatkozik a hangomra és a videómra, ha be van kapcsolva."
         }
       }
     },
@@ -634,7 +708,8 @@
       "site_settings": {
         "fields": {
           "value": {
-            "placeholder": "Adja meg a hivatkozást itt…"
+            "placeholder": "Adja meg a hivatkozást itt…",
+            "text_placeholder": "Ide írjon..."
           }
         }
       },

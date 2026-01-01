@@ -17,6 +17,8 @@
 # frozen_string_literal: true
 
 class ExternalController < ApplicationController
+  include ClientRoutable
+
   skip_before_action :verify_authenticity_token
 
   # GET 'auth/:provider/callback'
@@ -25,13 +27,8 @@ class ExternalController < ApplicationController
     provider = current_provider
 
     credentials = request.env['omniauth.auth']
-    user_info = {
-      name: credentials['info']['name'],
-      email: credentials['info']['email'],
-      language: extract_language_code(credentials['info']['locale']),
-      external_id: credentials['uid'],
-      verified: true
-    }
+
+    user_info = build_user_info(credentials)
 
     user = User.find_by(email: credentials['info']['email'], provider:)
     new_user = user.blank?
@@ -40,18 +37,29 @@ class ExternalController < ApplicationController
 
     # Check if they have a valid token only if a new sign up
     if new_user && registration_method == SiteSetting::REGISTRATION_METHODS[:invite] && !valid_invite_token(email: user_info[:email])
-      return redirect_to "/?error=#{Rails.configuration.custom_error_msgs[:invite_token_invalid]}"
+      return redirect_to root_path(error: Rails.configuration.custom_error_msgs[:invite_token_invalid])
     end
 
-    # Create the user if they dont exist
+    # Redirect to root if the user doesn't exist and has an invalid domain
+    return redirect_to root_path(error: Rails.configuration.custom_error_msgs[:banned_user]) if new_user && !valid_domain?(user_info[:email])
+
+    # Create the user if they don't exist
     if new_user
       user = UserCreator.new(user_params: user_info, provider: current_provider, role: default_role).call
+      handle_avatar(user, credentials['info']['image'])
       user.save!
       create_default_room(user)
+
+      # Send admins an email if smtp is enabled
+      if ENV['SMTP_SERVER'].present?
+        UserMailer.with(user:, admin_panel_url:, base_url: request.base_url,
+                        provider: current_provider).new_user_signup_email.deliver_later
+      end
     end
 
-    if SettingGetter.new(setting_name: 'ResyncOnLogin', provider:).call
+    if !new_user && SettingGetter.new(setting_name: 'ResyncOnLogin', provider:).call
       user.assign_attributes(user_info.except(:language)) # Don't reset the user's language
+      handle_avatar(user, credentials['info']['image'])
       user.save! if user.changed?
     end
 
@@ -61,18 +69,28 @@ class ExternalController < ApplicationController
     #   return redirect_to '/pending' if user.pending?
     # end
 
-    user.generate_session_token!
+    # set the cookie based on session timeout setting
+    session_timeout = SettingGetter.new(setting_name: 'SessionTimeout', provider: current_provider).call
+    user.generate_session_token!(extended_session: session_timeout)
+    user.update(last_login: DateTime.now)
+    handle_session_timeout(session_timeout.to_i, user) if session_timeout
+
     session[:session_token] = user.session_token
+    session[:oidc_id_token] = credentials.dig('credentials', 'id_token') if ENV['OPENID_CONNECT_LOGOUT_PATH'].present?
 
     # TODO: - Ahmad: deal with errors
-    redirect_location = cookies[:location]
-    cookies.delete(:location)
-    return redirect_to redirect_location if redirect_location&.match?('\A\/rooms\/\w{3}-\w{3}-\w{3}-\w{3}\/join\z')
 
-    redirect_to '/'
+    redirect_location = cookies.delete(:location)
+
+    return redirect_to redirect_location, allow_other_host: false if redirect_location&.match?('\/rooms\/\w{3}-\w{3}-\w{3}(-\w{3})?\/join\z')
+
+    redirect_to root_path
+  rescue ActionController::Redirecting::UnsafeRedirectError => e
+    Rails.logger.error("Unsafe redirection attempt: #{e}")
+    redirect_to root_path
   rescue StandardError => e
     Rails.logger.error("Error during authentication: #{e}")
-    redirect_to '/?error=SignupError'
+    redirect_to root_path(error: Rails.configuration.custom_error_msgs[:external_signup_error])
   end
 
   # POST /recording_ready
@@ -89,24 +107,42 @@ class ExternalController < ApplicationController
       @room.update(recordings_processing: @room.recordings_processing - 1) unless @room.recordings_processing.zero?
     end
 
-    RecordingCreator.new(recording:).call
+    RecordingCreator.new(recording:, first_creation: true).call
 
     render json: {}, status: :ok
+  rescue JWT::DecodeError
+    render json: {}, status: :unauthorized
   end
 
   # GET /meeting_ended
   # Increments a rooms recordings_processing if the meeting was recorded
   def meeting_ended
     # TODO: - ahmad: Add some sort of validation
-    return render json: {} unless params[:recordingmarks] == 'true'
-
     @room = Room.find_by(meeting_id: extract_meeting_id)
-    @room.update(recordings_processing: @room.recordings_processing + 1, online: false)
+    return render json: {}, status: :ok unless @room
+
+    recordings_processing = params[:recordingmarks] == 'true' ? @room.recordings_processing + 1 : @room.recordings_processing
+
+    unless @room.update(recordings_processing:, online: false)
+      Rails.logger.error "Failed to update room(id): #{@room.id}, model errors: #{@room.errors}"
+    end
 
     render json: {}, status: :ok
   end
 
   private
+
+  def handle_session_timeout(session_timeout, user)
+    # Creates a cookie based on session timeout site setting
+    cookies.encrypted[:_extended_session] = {
+      value: {
+        session_token: user.session_token
+      },
+      expires: session_timeout.days,
+      httponly: true,
+      secure: true
+    }
+  end
 
   def extract_language_code(locale)
     locale.try(:scan, /^[a-z]{2}/)&.first || I18n.default_locale
@@ -124,6 +160,45 @@ class ExternalController < ApplicationController
     return false if token.blank?
 
     # Try to delete the invitation and return true if it succeeds
-    Invitation.destroy_by(email:, provider: current_provider, token:).present?
+    Invitation.destroy_by(email: email.downcase, provider: current_provider, token:).present?
+  end
+
+  def build_user_info(credentials)
+    {
+      name: credentials['info']['name'],
+      email: credentials['info']['email'],
+      language: extract_language_code(credentials['info']['locale']),
+      external_id: credentials['uid'],
+      verified: true
+    }
+  end
+
+  # Downloads the image and correctly attaches it to the user
+  def handle_avatar(user, image)
+    return if image.blank? || !user.valid? # return if no image passed or user isnt valid
+
+    profile_file = URI.parse(image)
+
+    filename = File.basename(profile_file.path)
+    return if user.avatar&.filename&.to_s == filename # return if the filename is the same
+
+    file = profile_file.open
+    user.avatar.attach(
+      io: file, filename:, content_type: file.content_type
+    )
+  rescue StandardError => e
+    Rails.logger.error("Failed to upload avatar for #{user.id}: #{e}")
+    nil
+  end
+
+  def valid_domain?(email)
+    allowed_domain_emails = SettingGetter.new(setting_name: 'AllowedDomains', provider: current_provider).call
+    return true if allowed_domain_emails.blank?
+
+    domains = allowed_domain_emails.split(',')
+    domains.each do |domain|
+      return true if email.end_with?(domain)
+    end
+    false
   end
 end

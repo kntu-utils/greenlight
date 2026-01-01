@@ -52,10 +52,14 @@ export default function SigninForm() {
         <FormControl field={fields.password} type="password" />
         <Row>
           <Col>
-            <FormCheckBox field={fields.extend_session} />
+            <FormCheckBox id={fields.extend_session.hookForm.id} field={fields.extend_session} />
           </Col>
           <Col>
-            <Link to="/forget_password" className="text-link float-end small"> {t('authentication.forgot_password')} </Link>
+            {
+              env?.SMTP_ENABLED && (
+                <Link to="/forget_password" className="text-link float-end small"> {t('authentication.forgot_password')} </Link>
+              )
+            }
           </Col>
         </Row>
         <HCaptcha ref={captchaRef} />

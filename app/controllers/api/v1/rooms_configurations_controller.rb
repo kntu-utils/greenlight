@@ -22,6 +22,7 @@ module Api
       before_action only: %i[index] do
         ensure_authorized(%w[CreateRoom ManageSiteSettings ManageRoles ManageRooms], friendly_id: params[:friendly_id])
       end
+      skip_before_action :ensure_authenticated, only: %i[show]
 
       # GET /api/v1/rooms_configurations.json
       # Fetches and returns all rooms configurations.
@@ -32,6 +33,20 @@ module Api
                                      .to_h
 
         render_data data: rooms_configs, status: :ok
+      end
+
+      # GET /api/v1/rooms_configurations/:name.json
+      # Fetches and returns the value of the passed in configuration
+      def show
+        config_value = RoomsConfiguration.joins(:meeting_option)
+                                         .find_by(
+                                           provider: current_provider,
+                                           meeting_option: { name: params[:name] }
+                                         ).value
+
+        render_data data: config_value, status: :ok
+      rescue StandardError
+        render_error status: :not_found unless config_value
       end
     end
   end

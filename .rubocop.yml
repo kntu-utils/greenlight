@@ -1,7 +1,11 @@
 require:
   - rubocop-performance
-  - rubocop-rails
   - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-capybara
+
+plugins:
+  - rubocop-rails
 
 AllCops:
   Exclude:
@@ -12,7 +16,7 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'config/routes.rb'
   DisabledByDefault: false
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.3
   NewCops: enable
 
 # Document classes and non-namespace modules.
@@ -46,6 +50,9 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NestedGroups:
   Max: 7
 
+RSpec/StubbedMock:
+  Enabled: false
+
 # Enable having lines with up to 150 charachters in length.
 Layout/LineLength:
   Max: 150
@@ -59,6 +66,7 @@ Metrics/BlockLength:
   AllowedMethods: [ 'describe', 'context', 'xdescribe', 'xcontext', 'FactoryBot.define' ]
   Exclude:
     - 'config/routes.rb'
+    - 'config/environments/production.rb'
   Max: 70
 
 Metrics/ClassLength:
@@ -67,7 +75,7 @@ Metrics/ClassLength:
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
-  Max: 65
+  Max: 110
 
 Metrics/ParameterLists:
   CountKeywordArgs: false
@@ -76,10 +84,10 @@ RSpec/AnyInstance:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Max: 16
+  Max: 25
 
 Metrics/PerceivedComplexity:
-  Max: 13
+  Max: 25
 
 Rails/Exit:
   Exclude:
@@ -92,3 +100,11 @@ Rails/Output:
 Rails/RootPathnameMethods:
   Enabled: false
 
+Rails/ThreeStateBooleanColumn:
+  Enabled: false
+
+Naming/PredicateMethod:
+  Enabled: false
+
+Style/SafeNavigationChainLength:
+  Enabled: false

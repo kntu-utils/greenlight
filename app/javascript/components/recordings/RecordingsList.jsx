@@ -16,8 +16,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Stack, Table } from 'react-bootstrap';
+import {
+  Badge, Card, Stack, Table,
+} from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import { useTranslation } from 'react-i18next';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import SortBy from '../shared_components/search/SortBy';
 import RecordingsListRowPlaceHolder from './RecordingsListRowPlaceHolder';
 import NoSearchResults from '../shared_components/search/NoSearchResults';
@@ -25,12 +30,30 @@ import RoomsRecordingRow from './room_recordings/RoomsRecordingRow';
 import Pagination from '../shared_components/Pagination';
 import EmptyRecordingsList from './EmptyRecordingsList';
 import SearchBar from '../shared_components/search/SearchBar';
-import ProcessingRecordingRow from './ProcessingRecordingRow';
 
 export default function RecordingsList({
-  recordings, isLoading, setPage, searchInput, setSearchInput, recordingsProcessing, adminTable,
+  recordings, isLoading, setPage, searchInput, setSearchInput, recordingsProcessing, adminTable, numPlaceholders,
 }) {
   const { t } = useTranslation();
+
+  const visibilityTooltip = (
+    <Tooltip id="recordings-visibility-tooltip" className="text-start">
+      <div className="fw-semibold mb-1">{t('recording.visibility_help.title')}</div>
+      <ul className="mb-0 ps-3">
+        <li>{t('recording.visibility_help.public_protected')}</li>
+        <li>{t('recording.visibility_help.public')}</li>
+        <li>{t('recording.visibility_help.protected')}</li>
+        <li>{t('recording.visibility_help.published')}</li>
+        <li>{t('recording.visibility_help.unpublished')}</li>
+      </ul>
+    </Tooltip>
+  );
+
+  const formatsTooltip = (
+    <Tooltip id="recordings-formats-tooltip" className="text-start">
+      {t('recording.formats_help')}
+    </Tooltip>
+  );
 
   if (!isLoading && recordings?.data?.length === 0 && !searchInput && recordingsProcessing === 0) {
     return <EmptyRecordingsList />;
@@ -42,6 +65,16 @@ export default function RecordingsList({
         <div>
           <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
         </div>
+        { recordingsProcessing > 0 && (
+          <Badge className="ms-auto badge-brand-outline p-2">
+            <Stack direction="horizontal" gap={2}>
+              <Badge className="rounded-pill recordings-count-badge ms-2 text-brand">
+                { recordingsProcessing }
+              </Badge>
+              <span> { t('recording.processing') } </span>
+            </Stack>
+          </Badge>
+        )}
       </Stack>
       {
         (searchInput && recordings?.data.length === 0)
@@ -57,22 +90,53 @@ export default function RecordingsList({
                     <th className="fw-normal border-end-0">{t('recording.name')}<SortBy fieldName="name" /></th>
                     <th className="fw-normal border-0">{t('recording.length')}<SortBy fieldName="length" /></th>
                     <th className="fw-normal border-0">{t('recording.users')}</th>
-                    <th className="fw-normal border-0">{t('recording.visibility')}<SortBy fieldName="visibility" /></th>
-                    <th className="fw-normal border-0">{t('recording.formats')}</th>
+                    <th className="fw-normal border-0">
+                      <Stack direction="horizontal" gap={1} className="align-items-center">
+                        <span>{t('recording.visibility')}</span>
+                        <SortBy fieldName="visibility" />
+                        <OverlayTrigger
+                          placement="top"
+                          trigger={['hover', 'focus']}
+                          overlay={visibilityTooltip}
+                        >
+                          <button type="button" className="btn btn-link p-0 border-0 d-inline-flex text-muted cursor-pointer">
+                            <QuestionMarkCircleIcon className="hi-xs" />
+                          </button>
+                        </OverlayTrigger>
+                      </Stack>
+                    </th>
+                    <th className="fw-normal border-0">
+                      <Stack direction="horizontal" gap={1} className="align-items-center">
+                        <span>{t('recording.formats')}</span>
+                        <OverlayTrigger
+                          placement="top"
+                          trigger={['hover', 'focus']}
+                          overlay={formatsTooltip}
+                        >
+                          <button type="button" className="btn btn-link p-0 border-0 d-inline-flex text-muted cursor-pointer">
+                            <QuestionMarkCircleIcon className="hi-xs" />
+                          </button>
+                        </OverlayTrigger>
+                      </Stack>
+                    </th>
                     <th className="border-start-0" aria-label="options" />
                   </tr>
                 </thead>
                 <tbody className="border-top-0">
-                  {[...Array(recordingsProcessing)].map(() => <ProcessingRecordingRow />)}
                   {
-                    (isLoading && [...Array(7)].map((val, idx) => (
+                    isLoading && Array.from({ length: numPlaceholders }).map((_, idx) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <RecordingsListRowPlaceHolder key={idx} />
-                    )))
+                    ))
                   }
                   {
-                    (recordings?.data?.length > 0 && recordings?.data?.map((recording) => (
-                      <RoomsRecordingRow key={recording.id} recording={recording} adminTable={adminTable} />
+                    (recordings?.data?.length > 0 && recordings?.data?.map((recording, idx) => (
+                      <RoomsRecordingRow
+                        key={recording.id}
+                        recording={recording}
+                        adminTable={adminTable}
+                        dropUp={(recordings?.meta?.page || 0) * (recordings?.meta?.items || 0) - 1 === idx}
+                      />
                     )))
                   }
                 </tbody>
@@ -99,10 +163,11 @@ export default function RecordingsList({
 }
 
 RecordingsList.defaultProps = {
-  recordings: { data: [], meta: { page: 1, pages: 1 } },
+  recordings: { data: [], meta: { page: 1, pages: 1, items: 3 } },
   recordingsProcessing: 0,
   searchInput: '',
   adminTable: false,
+  numPlaceholders: 7,
 };
 
 RecordingsList.propTypes = {
@@ -124,6 +189,7 @@ RecordingsList.propTypes = {
     meta: PropTypes.shape({
       page: PropTypes.number,
       pages: PropTypes.number,
+      items: PropTypes.number,
     }),
   }),
   isLoading: PropTypes.bool.isRequired,
@@ -132,4 +198,5 @@ RecordingsList.propTypes = {
   setSearchInput: PropTypes.func.isRequired,
   recordingsProcessing: PropTypes.number,
   adminTable: PropTypes.bool,
+  numPlaceholders: PropTypes.number,
 };

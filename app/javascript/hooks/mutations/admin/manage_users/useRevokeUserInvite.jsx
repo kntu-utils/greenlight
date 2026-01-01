@@ -14,29 +14,25 @@
 // You should have received a copy of the GNU Lesser General Public License along
 // with Greenlight; if not, see <http://www.gnu.org/licenses/>.
 
-import { VideoCameraIcon } from '@heroicons/react/24/outline';
-import React from 'react';
-import { Stack } from 'react-bootstrap';
+import { useMutation, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import axios from '../../../../helpers/Axios';
 
-export default function ProcessingRecordingRow() {
+export default function useRevokeUserInvite() {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  return (
-    <tr id="room-recordings" className="align-middle text-muted border border-2">
-      <td className="text-dark border-end-0">
-        <Stack direction="horizontal" className="py-2">
-          <div className="recording-icon-circle rounded-circle me-3 d-flex align-items-center justify-content-center">
-            <VideoCameraIcon className="hi-s text-brand" />
-          </div>
-          { t('recording.processing_recording') }
-        </Stack>
-      </td>
-      <td className="border-0" />
-      <td className="border-0" />
-      <td className="border-0" />
-      <td className="border-0" />
-      <td className="border-0" />
-    </tr>
+  return useMutation(
+    (id) => axios.delete(`/admin/invitations/${id}.json`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['getInvitations']);
+        toast.success(t('toast.success.invitations.invitation_revoked'));
+      },
+      onError: () => {
+        toast.error(t('toast.error.problem_completing_action'));
+      },
+    },
   );
 }

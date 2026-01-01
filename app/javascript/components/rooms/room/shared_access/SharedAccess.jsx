@@ -29,6 +29,7 @@ import useDeleteSharedAccess from '../../../../hooks/mutations/shared_accesses/u
 import useSharedUsers from '../../../../hooks/queries/shared_accesses/useSharedUsers';
 import SharedAccessEmpty from './SharedAccessEmpty';
 import useRoom from '../../../../hooks/queries/rooms/useRoom';
+import { useAuth } from '../../../../contexts/auth/AuthProvider';
 
 export default function SharedAccess() {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ export default function SharedAccess() {
   const { data: sharedUsers } = useSharedUsers(friendlyId, searchInput);
   const deleteSharedAccess = useDeleteSharedAccess(friendlyId);
   const { data: room } = useRoom(friendlyId);
+  const currentUser = useAuth();
+  const isAdmin = currentUser?.role.name === 'Administrator';
 
   if (sharedUsers?.length || searchInput) {
     return (
@@ -45,19 +48,21 @@ export default function SharedAccess() {
           <div>
             <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
           </div>
-          <Modal
-            modalButton={(
-              <Button
-                variant="brand-outline"
-                className="ms-auto"
-              >{t('room.shared_access.add_share_access')}
-              </Button>
-)}
-            title={t('room.shared_access.share_room_access')}
-            body={<SharedAccessForm />}
-            size="lg"
-            id="shared-access-modal"
-          />
+          { (!room.shared || isAdmin) && (
+            <Modal
+              modalButton={(
+                <Button
+                  variant="brand-outline"
+                  className="ms-auto"
+                >{t('room.shared_access.add_share_access')}
+                </Button>
+              )}
+              title={t('room.shared_access.share_room_access')}
+              body={<SharedAccessForm />}
+              size="lg"
+              id="shared-access-modal"
+            />
+          )}
         </Stack>
         <Card className="border-0 card-shadow mt-3">
           <Card.Body className="p-0">
@@ -83,6 +88,7 @@ export default function SharedAccess() {
                           </Stack>
                         </td>
                         <td>
+                          { (!room.shared || isAdmin) && (
                           <Button
                             variant="icon"
                             className="float-end pe-2"
@@ -90,6 +96,7 @@ export default function SharedAccess() {
                           >
                             <TrashIcon className="hi-s" />
                           </Button>
+                          )}
                         </td>
                       </tr>
                     ))
