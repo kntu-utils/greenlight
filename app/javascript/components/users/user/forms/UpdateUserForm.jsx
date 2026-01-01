@@ -68,8 +68,18 @@ export default function UpdateUserForm({ user }) {
     methods.setValue('language', currentLanguage());
   }, [currentLanguage()]);
 
+  const onSubmit = (data) => {
+    updateUserAPI.mutate(data, {
+      onSuccess: () => {
+        if (user.id === currentUser.id && data.language !== user.language) {
+          window.location.reload();
+        }
+      },
+    });
+  };
+
   return (
-    <Form methods={methods} onSubmit={updateUserAPI.mutate}>
+    <Form methods={methods} onSubmit={onSubmit}>
       <FormControl field={fields.name} type="text" readOnly={user.external_account && !PermissionChecker.hasManageUsers(currentUser)} />
       <FormControl field={fields.email} type="email" readOnly />
       <FormSelect field={fields.language} variant="dropdown">
