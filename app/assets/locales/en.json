@@ -128,6 +128,8 @@
     "add_new_room": "+ New Room",
     "create_room": "Create Room",
     "delete_room": "Delete Room",
+    "copy_fa": "Copy Join URL",
+    "copy_en": "English Version",
     "create_new_room": "Create New Room",
     "enter_room_name": "Enter the room name",
     "shared_by": "shared by",

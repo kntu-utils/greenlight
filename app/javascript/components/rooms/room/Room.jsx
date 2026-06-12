@@ -119,29 +119,22 @@ export default function Room() {
               )}
             </Button>
 
-            <ButtonGroup className="float-end mx-2">
-              <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join`, t('room.copy_fa'))}>
+            <Dropdown className="btn-group mt-1 mx-2 float-end pb-5">
+              <Button variant="brand-outline" type="button" className="btn dropdown-main" onClick={() => copy(`${window.location}/join`, t('room.copy_fa'))} >
+                <Square2StackIcon className="hi-s me-1" />
                 { t('room.copy_fa') }
               </Button>
-              <Button variant="brand-outline" className="mt-1 float-end" onClick={() => copy(`${window.location}/join?lng=en`, t('room.copy_en'))}>
-                { t('room.copy_en') }
-              </Button>
-            </ButtonGroup>
-
-            <Dropdown className="btn-group mt-1 mx-2 float-end pb-5">
-              <Button variant="brand-outline" type="button" className="btn dropdown-main" onClick={() => copyInvite()}>
-                <Square2StackIcon className="hi-s me-1" />
-                { t('copy') }
-              </Button>
-              { (roomSettings?.data?.glModeratorAccessCode || roomSettings?.data?.glViewerAccessCode) && (
-                <Dropdown.Toggle
-                  variant="brand-outline"
-                  className="btn dropdown-toggle dropdown-toggle-split"
-                  id="dropdown-toggle"
-                />
-              )}
+        
+              <Dropdown.Toggle
+                variant="brand-outline"
+                className="btn dropdown-toggle dropdown-toggle-split"
+                id="dropdown-toggle"
+              />
 
               <Dropdown.Menu className="dropdown-menu">
+                <Dropdown.Item onClick={() => copy(`${window.location}/join?lng=en`, t('room.copy_en'))}>
+                  { t('room.copy_en') }
+                </Dropdown.Item>
                 { roomSettings?.data?.glModeratorAccessCode && (
                   <Dropdown.Item onClick={() => copyInvite('moderator')}>
                     { t('copy_moderator_code') }

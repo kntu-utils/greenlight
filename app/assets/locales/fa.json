@@ -133,9 +133,9 @@
     "search_not_found": "اتاقی یافت نشد",
     "rooms_list_is_empty": "شما هنوز هیچ اتاقی ندارید!",
     "rooms_list_empty_create_room": "با کلیک بر روی دکمه زیر و وارد کردن نام اتاق، اولین اتاق خود را ایجاد کنید.",
-    "copy_fa": "آدرس نسخه فارسی",
+    "copy_fa": "پیوند عضویت",
     "copy_code": "کد دسترسی",
-    "copy_en": "آدرس نسخه لاتین",
+    "copy_en": "نسخه لاتین",
     "meeting": {
       "start_meeting": "شروع جلسه",
       "join_meeting": "پیوستن به جلسه",
@@ -757,7 +757,7 @@
       }
     }
   },
-  "copy_moderator_code": "رونوشت کد مدیر",
-  "copy_viewer_code": "رونوشت کد بیننده",
+  "copy_moderator_code": "کد مدیر",
+  "copy_viewer_code": "کد بیننده",
   "reset": "بازنشانی"
 }
