@@ -52,7 +52,9 @@ module Api
 
         registration_method = SettingGetter.new(setting_name: 'RegistrationMethod', provider: current_provider).call
 
-        if registration_method == SiteSetting::REGISTRATION_METHODS[:invite] && !valid_invite_token && !admin_create
+        invited = valid_invite_token
+
+        if registration_method == SiteSetting::REGISTRATION_METHODS[:invite] && !invited && !admin_create
           return render_error errors: Rails.configuration.custom_error_msgs[:invite_token_invalid]
         end
 
@@ -68,13 +70,16 @@ module Api
 
         user = UserCreator.new(user_params: create_user_params.except(:invite_token), provider: current_provider, role: default_role).call
 
-        user.verify! unless verification_enabled
+        smtp_enabled = ENV['SMTP_SERVER'].present?
+
+        # Invited users are already verified since they confirmed their email via the invitation
+        user.verify! if !smtp_enabled || invited
 
         # Set to pending if registration method is approval
         user.pending! if !admin_create && registration_method == SiteSetting::REGISTRATION_METHODS[:approval]
 
         if user.save
-          if verification_enabled
+          if smtp_enabled && !invited
             token = user.generate_activation_token!
             UserMailer.with(user:,
                             activation_url: activate_account_url(token), base_url: request.base_url,
@@ -198,6 +203,10 @@ module Api
         is_admin = PermissionsChecker.new(current_user:, permission_names: 'ManageUsers', current_provider:).call
 
         return %i[password avatar language role_id invite_token] if external_auth? && !is_admin
+
+        allow_name_update = SettingGetter.new(setting_name: 'AllowNameUpdate', provider: current_provider).call
+
+        return %i[password avatar language role_id invite_token] if !allow_name_update && !is_admin
 
         %i[name password avatar language role_id invite_token]
       end

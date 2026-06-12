@@ -30,7 +30,7 @@ module Api
           VERSION_TAG: ENV.fetch('VERSION_TAG', ''),
           URL_PREFIX: ENV.fetch('RELATIVE_URL_ROOT', ''),
           CURRENT_PROVIDER: current_provider,
-          SMTP_ENABLED: ENV.fetch('SMTP_SERVER', nil)
+          SMTP_ENABLED: ENV.fetch('SMTP_SERVER', nil).present?
         }, status: :ok
       end
     end

@@ -16,6 +16,8 @@
 
 # frozen_string_literal: true
 
-class TenantSerializer < ApplicationSerializer
-  attributes :id, :name, :client_secret, :region
+class AddNameToInvitations < ActiveRecord::Migration[7.0]
+  def change
+    add_column :invitations, :name, :string
+  end
 end

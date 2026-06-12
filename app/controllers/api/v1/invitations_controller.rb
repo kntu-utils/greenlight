@@ -16,6 +16,22 @@
 
 # frozen_string_literal: true
 
-class TenantSerializer < ApplicationSerializer
-  attributes :id, :name, :client_secret, :region
+module Api
+  module V1
+    class InvitationsController < ApiController
+      skip_before_action :ensure_authenticated, only: %i[show]
+
+      # GET /api/v1/invitations/:token
+      # Returns the invitation details for the given token (public endpoint for signup pre-fill)
+      def show
+        invitation = Invitation.find_by(token: params[:token], provider: current_provider)
+
+        if invitation && invitation.updated_at > Invitation::INVITATION_VALIDITY_PERIOD.ago
+          render_data data: invitation, serializer: InvitationSerializer, status: :ok
+        else
+          render_error status: :not_found
+        end
+      end
+    end
+  end
 end

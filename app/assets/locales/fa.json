@@ -314,8 +314,10 @@
         "terms": "شرایط و ضوابط",
         "privacy": "سیاست حفظ حریم خصوصی",
         "privacy_policy": "سیاست حفظ حریم خصوصی",
+        "accessibility_statement": "عبارت دسترسی",
         "change_term_links": "تغییر پیوندهای مقررات که در پایین صفحه نمایان می‌شوند",
         "change_privacy_link": "پیوند حریم خصوصی که در پایین صفحه نمایان می‌شود را تغییر دهید",
+        "change_accessibility_statement_link": "تغییر پیوند دسترسی که در پایین صفحه نمایش داده میشود",
         "change_url": "تغییر نشانی اینترنتی",
         "enter_link": "پیوند را اینجا وارد کنید",
         "change_helpcenter_link": "تغییر پیوند مرکز راهنما که در منوی کشویی نمایه ظاهر می‌شود",
@@ -358,7 +360,9 @@
         },
         "allowed_domains": "دامنه‌های ایمیل مجاز",
         "allowed_domains_signup_description": "اجازه ثبت‌نام به دامنه‌های ایمیل خاص. قالب باید به این صورت باشد: @test.com,domain.com",
-        "enter_allowed_domains_rule": "دامنه‌های مجاز را وارد کنید"
+        "enter_allowed_domains_rule": "دامنه‌های مجاز را وارد کنید",
+        "allow_name_update": "مجوز تغییر نام",
+        "allow_name_update_description": "به کاربران اجازه میدهد پس از ایجاد حساب، نام خود را تغییر دهند."
       }
     },
     "room_configuration": {
@@ -736,6 +740,9 @@
         "fields": {
           "emails": {
             "label": "ایمیل ها"
+          },
+          "names": {
+            "label": "نام ها (اختیاری)"
           }
         }
       },
@@ -759,5 +766,6 @@
   },
   "copy_moderator_code": "کد مدیر",
   "copy_viewer_code": "کد بیننده",
-  "reset": "بازنشانی"
+  "reset": "بازنشانی",
+  "reset_password": "بازنشانی گذرواژه"
 }
